@@ -73,48 +73,7 @@ function PaymentsPage() {
         <div className="divide-y divide-border/50">
           {data.transactions.length > 0 ? (
             data.transactions.map((t) => (
-              // <div
-              //   key={t.paymentId}
-              //   className="p-5 hover:bg-canvas-alt transition-colors flex items-center justify-between gap-4"
-              // >
-              //   <div className="flex items-center gap-4">
-              //     <div className="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-600 font-bold uppercase text-[10px]">
-              //       Pay
-              //     </div>
-
-              //     <div>
-              //       <p className="font-bold text-sm uppercase tracking-tight">
-              //         {t.userName}
-              //       </p>
-              //       <p className="text-xs text-muted font-medium">
-              //         {t.courseTitle}
-              //       </p>
-              //       <p className="text-[11px] text-muted font-mono mt-1">
-              //         TXN ID: {t.transactionId || t.paymentId}
-              //       </p>
-              //     </div>
-              //   </div>
-              //   <div className="text-right">
-              //     <p
-              //       className={`font-black text-sm ${t.status === "paid" ? "text-green-600" : "text-muted"}`}
-              //     >
-              //       + Rs {t.amount}
-              //     </p>
-              //     <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">
-              //       {t.purchaseDate
-              //         ? new Date(t.purchaseDate).toLocaleDateString()
-              //         : "Pending"}
-              //     </p>
-              //   </div>
-              //   <div>
-              //     <button
-              //       type="button"
-              //       className="h-10 px-4 rounded-xl bg-teal-500 text-white hover:bg-teal-600 transition-colors flex items-center gap-2 font-semibold shadow-lg shadow-teal-500/20"
-              //     >
-              //       <span>See Details</span>
-              //     </button>
-              //   </div>
-              // </div>
+             
               <div
                 key={t.paymentId}
                 className="grid grid-cols-[1.5fr_1fr_auto] items-center gap-6 p-5 hover:bg-canvas-alt transition-colors"
