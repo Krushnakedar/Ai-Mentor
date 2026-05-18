@@ -28,7 +28,9 @@ const FormInput = ({ label, type, placeholder, value, onChange }) => {
 
 /* Password Validation UI Helper */
 const ValidationItem = ({ label, met }) => (
-  <div className={`flex items-center gap-1 ${met ? "text-green-500" : "text-gray-400"}`}>
+  <div
+    className={`flex items-center gap-1 ${met ? "text-green-500" : "text-gray-400"}`}
+  >
     {met ? <Check size={10} /> : <X size={10} />}
     <span className="text-[10px]">{label}</span>
   </div>
@@ -72,19 +74,22 @@ const SignUpPage = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/users/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/users/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            name: username,
+            email,
+            password,
+          }),
         },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          name: username,
-          email,
-          password,
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -182,9 +187,18 @@ const SignUpPage = () => {
 
           {/* 🔹 PASSWORD CHECKLIST UI */}
           <div className="mt-2 grid grid-cols-2 gap-1">
-            <ValidationItem label="8+ Characters" met={passwordRequirements.length} />
-            <ValidationItem label="Uppercase" met={passwordRequirements.capital} />
-            <ValidationItem label="Lowercase" met={passwordRequirements.lower} />
+            <ValidationItem
+              label="8+ Characters"
+              met={passwordRequirements.length}
+            />
+            <ValidationItem
+              label="Uppercase"
+              met={passwordRequirements.capital}
+            />
+            <ValidationItem
+              label="Lowercase"
+              met={passwordRequirements.lower}
+            />
             <ValidationItem label="Number" met={passwordRequirements.number} />
             <ValidationItem label="Symbol" met={passwordRequirements.symbol} />
           </div>

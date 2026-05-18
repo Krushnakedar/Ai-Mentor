@@ -42,7 +42,7 @@ const WatchedVideos = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const data = await response.json();
 
@@ -84,8 +84,9 @@ const WatchedVideos = () => {
     if (diffDays === 1) return "1 day ago";
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30)
-      return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? "s" : ""
-        } ago`;
+      return `${Math.floor(diffDays / 7)} week${
+        Math.floor(diffDays / 7) > 1 ? "s" : ""
+      } ago`;
     return date.toLocaleDateString();
   };
 
@@ -162,9 +163,7 @@ const WatchedVideos = () => {
             <p className="text-muted text-sm font-normal mb-1">
               {t("watched.avg_session")}
             </p>
-            <p className="text-main text-2xl font-bold">
-              {metrics.avgSession}
-            </p>
+            <p className="text-main text-2xl font-bold">{metrics.avgSession}</p>
           </div>
           <div className="w-12 h-12 bg-purple-50 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
             <TrendingUp className="w-4 h-4 text-indigo-600" />
@@ -259,12 +258,13 @@ const WatchedVideos = () => {
         {/* Progress Bar */}
         <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-300 dark:bg-gray-700">
           <div
-            className={`h-full ${video.status === "completed"
+            className={`h-full ${
+              video.status === "completed"
                 ? "bg-green-500"
                 : video.status === "in-progress"
                   ? "bg-orange-500"
                   : "bg-gray-400"
-              }`}
+            }`}
             style={{ width: `${video.progress}%` }}
           ></div>
         </div>
@@ -293,17 +293,24 @@ const WatchedVideos = () => {
         {/* Action Buttons */}
         <div className="flex gap-2">
           <button
-            className={`flex-1 h-10 rounded-lg text-sm font-medium ${video.status === "completed"
+            className={`flex-1 h-10 rounded-lg text-sm font-medium ${
+              video.status === "completed"
                 ? "bg-canvas text-main hover:bg-canvas-alt"
                 : "bg-orange-500 text-white"
-              }`}
+            }`}
             // --- VIDEO RESUME NAVIGATION FOR THE TEAM ---
             // When the user clicks Resume, we navigate them to the course URL but WE ALSO PASS STATE.
             // LearningPage uses `location.state.lessonId` to override the default course progression
             // and forcefully jump the user to this specific video instead.
-            onClick={() => navigate(`/learning/${video.courseId}`, { state: { lessonId: video.lessonId } })}
+            onClick={() =>
+              navigate(`/learning/${video.courseId}`, {
+                state: { lessonId: video.lessonId },
+              })
+            }
           >
-            {video.status === "completed" ? t("watched.rewatch") : t("watched.resume")}
+            {video.status === "completed"
+              ? t("watched.rewatch")
+              : t("watched.resume")}
           </button>
           <button
             className="w-7 h-10 flex items-center justify-center text-muted hover:text-main"
@@ -318,37 +325,37 @@ const WatchedVideos = () => {
 
   return (
     <>
-        {/* Main Dashboard Content */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8">
-          {/* Page Title */}
-          <div className="mb-6 lg:mb-8">
-            <h1
-              className="text-main text-2xl md:text-3xl font-bold mb-1"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              {t("watched.title")}
-            </h1>
-            <p
-              className="text-muted text-sm md:text-base"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              {t("watched.subtitle")}
-            </p>
-          </div>
+      {/* Main Dashboard Content */}
+      <main className="flex-1 p-4 md:p-6 lg:p-8">
+        {/* Page Title */}
+        <div className="mb-6 lg:mb-8">
+          <h1
+            className="text-main text-2xl md:text-3xl font-bold mb-1"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            {t("watched.title")}
+          </h1>
+          <p
+            className="text-muted text-sm md:text-base"
+            style={{ fontFamily: "Poppins, sans-serif" }}
+          >
+            {t("watched.subtitle")}
+          </p>
+        </div>
 
-          {/* Metrics Cards */}
-          <MetricsCards />
+        {/* Metrics Cards */}
+        <MetricsCards />
 
-          {/* Search and Filters */}
-          <SearchAndFilters />
+        {/* Search and Filters */}
+        <SearchAndFilters />
 
-          {/* Video Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6">
-            {sortedVideos.map((video) => (
-              <VideoCard key={video.id} video={video} />
-            ))}
-          </div>
-        </main>
+        {/* Video Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6">
+          {sortedVideos.map((video) => (
+            <VideoCard key={video.id} video={video} />
+          ))}
+        </div>
+      </main>
     </>
   );
 };

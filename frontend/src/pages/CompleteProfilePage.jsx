@@ -6,7 +6,14 @@ import { Eye, EyeOff, Check, X, Camera, User as UserIcon } from "lucide-react";
 import toast from "react-hot-toast";
 
 /* ─── Reusable form input (consistent with Login/Signup) ─── */
-const FormInput = ({ label, type, placeholder, value, onChange, required = true }) => (
+const FormInput = ({
+  label,
+  type,
+  placeholder,
+  value,
+  onChange,
+  required = true,
+}) => (
   <div className="mb-3">
     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
       {label}
@@ -24,7 +31,9 @@ const FormInput = ({ label, type, placeholder, value, onChange, required = true 
 
 /* ─── Password validation UI helper (same as SignUpPage) ─── */
 const ValidationItem = ({ label, met }) => (
-  <div className={`flex items-center gap-1 ${met ? "text-green-500" : "text-gray-400"}`}>
+  <div
+    className={`flex items-center gap-1 ${met ? "text-green-500" : "text-gray-400"}`}
+  >
     {met ? <Check size={10} /> : <X size={10} />}
     <span className="text-[10px]">{label}</span>
   </div>
@@ -33,7 +42,7 @@ const ValidationItem = ({ label, met }) => (
 const CompleteProfilePage = () => {
   const { user, updateUser } = useAuth();
   const navigate = useNavigate();
-  
+
   // Graceful redirect: If profile is already complete, don't show the form
   useEffect(() => {
     if (user?.isProfileComplete) {
@@ -48,8 +57,11 @@ const CompleteProfilePage = () => {
   // 2. New Email Users: Only show missing setup (Avatar, Bio) as they already set names/password
   // 3. Existing Users: Only show whatever is missing in the database
   const showNameFields =
-    (isGoogleUser && user?.isNewUser) || !user?.firstName?.trim() || !user?.lastName?.trim();
-  const showPasswordField = isGoogleUser && (user?.isNewUser || !user?.hasPassword);
+    (isGoogleUser && user?.isNewUser) ||
+    !user?.firstName?.trim() ||
+    !user?.lastName?.trim();
+  const showPasswordField =
+    isGoogleUser && (user?.isNewUser || !user?.hasPassword);
   const showBioField = user?.isNewUser || !user?.bio?.trim();
   const showAvatarField = user?.isNewUser || !user?.avatar_url?.trim();
 
@@ -60,13 +72,17 @@ const CompleteProfilePage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [bio, setBio] = useState(user?.bio || "");
   const [avatar, setAvatar] = useState(null);
-  
+
   // Pre-fill avatar preview with existing URL, or a DiceBear fallback for Google users without a photo
   const getInitialAvatar = () => {
     if (user?.avatar_url) return user.avatar_url;
     // Only use DiceBear initials for Google users
     if (isGoogleUser || user?.googleId || user?.isGoogleUser) {
-      const seed = encodeURIComponent(`${firstName || user?.firstName || ""} ${lastName || user?.lastName || ""}`.trim() || user?.name || "User");
+      const seed = encodeURIComponent(
+        `${firstName || user?.firstName || ""} ${lastName || user?.lastName || ""}`.trim() ||
+          user?.name ||
+          "User",
+      );
       return `https://api.dicebear.com/8.x/initials/svg?seed=${seed}`;
     }
     return null;
@@ -75,14 +91,14 @@ const CompleteProfilePage = () => {
   const [avatarPreview, setAvatarPreview] = useState(getInitialAvatar());
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  
+
   /* ─── Sync form state with user data ─── */
   useEffect(() => {
     if (user) {
       if (user.firstName && !firstName) setFirstName(user.firstName);
       if (user.lastName && !lastName) setLastName(user.lastName);
       if (user.bio && !bio) setBio(user.bio);
-      
+
       // Update preview if user photo becomes available (and user hasn't uploaded one manually)
       if (user.avatar_url && !avatar) {
         setAvatarPreview(user.avatar_url);
@@ -108,7 +124,10 @@ const CompleteProfilePage = () => {
     // Validate file type
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     if (!allowedTypes.includes(file.type)) {
-      setErrors((prev) => ({ ...prev, avatar: "Only JPEG, PNG, WebP, and GIF images are allowed" }));
+      setErrors((prev) => ({
+        ...prev,
+        avatar: "Only JPEG, PNG, WebP, and GIF images are allowed",
+      }));
       return;
     }
 
@@ -187,7 +206,7 @@ const CompleteProfilePage = () => {
             Authorization: `Bearer ${token}`,
           },
           body: formData,
-        }
+        },
       );
 
       const data = await response.json();
@@ -225,51 +244,59 @@ const CompleteProfilePage = () => {
         {/* ─── Dynamic Field: Profile Picture ─── */}
         {showAvatarField && (
           <div className="flex flex-col items-center mb-2">
-          <label
-            htmlFor="avatar-upload"
-            className="relative cursor-pointer group"
-          >
-            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center bg-gray-100 dark:bg-slate-800 transition-all group-hover:border-[#00BEA5] group-hover:shadow-lg group-hover:shadow-teal-500/20">
-              {avatarPreview ? (
-                <img
-                  src={avatarPreview}
-                  alt="Avatar preview"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    // Only use DiceBear fallback for Google users
-                    if (isGoogleUser || user?.googleId || user?.isGoogleUser) {
-                      const seed = encodeURIComponent(`${firstName || user?.firstName || ""} ${lastName || user?.lastName || ""}`.trim() || user?.name || "User");
-                      e.target.src = `https://api.dicebear.com/8.x/initials/svg?seed=${seed}`;
-                    } else {
-                      // For email users, clear the broken preview so the generic icon shows
-                      setAvatarPreview(null);
-                    }
-                  }}
-                />
-              ) : (
-                <UserIcon className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-              )}
-            </div>
-            {/* Camera overlay */}
-            <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-gradient-to-r from-[#2186df] to-[#02ffbb] flex items-center justify-center shadow-md border-2 border-white dark:border-[#0f172a] group-hover:scale-110 transition-transform">
-              <Camera className="w-3.5 h-3.5 text-white" />
-            </div>
-          </label>
-          <input
-            id="avatar-upload"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            onChange={handleAvatarChange}
-            className="hidden"
-          />
-          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5">
-            Click to upload photo
-          </p>
-          {errors.avatar && (
-            <p className="text-[10px] text-red-500 mt-0.5">{errors.avatar}</p>
-          )}
-        </div>
-      )}
+            <label
+              htmlFor="avatar-upload"
+              className="relative cursor-pointer group"
+            >
+              <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center bg-gray-100 dark:bg-slate-800 transition-all group-hover:border-[#00BEA5] group-hover:shadow-lg group-hover:shadow-teal-500/20">
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Avatar preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Only use DiceBear fallback for Google users
+                      if (
+                        isGoogleUser ||
+                        user?.googleId ||
+                        user?.isGoogleUser
+                      ) {
+                        const seed = encodeURIComponent(
+                          `${firstName || user?.firstName || ""} ${lastName || user?.lastName || ""}`.trim() ||
+                            user?.name ||
+                            "User",
+                        );
+                        e.target.src = `https://api.dicebear.com/8.x/initials/svg?seed=${seed}`;
+                      } else {
+                        // For email users, clear the broken preview so the generic icon shows
+                        setAvatarPreview(null);
+                      }
+                    }}
+                  />
+                ) : (
+                  <UserIcon className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                )}
+              </div>
+              {/* Camera overlay */}
+              <div className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-gradient-to-r from-[#2186df] to-[#02ffbb] flex items-center justify-center shadow-md border-2 border-white dark:border-[#0f172a] group-hover:scale-110 transition-transform">
+                <Camera className="w-3.5 h-3.5 text-white" />
+              </div>
+            </label>
+            <input
+              id="avatar-upload"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleAvatarChange}
+              className="hidden"
+            />
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5">
+              Click to upload photo
+            </p>
+            {errors.avatar && (
+              <p className="text-[10px] text-red-500 mt-0.5">{errors.avatar}</p>
+            )}
+          </div>
+        )}
 
         {/* ─── Dynamic Field: First & Last Name ─── */}
         {showNameFields && (
@@ -286,7 +313,9 @@ const CompleteProfilePage = () => {
                 }}
               />
               {errors.firstName && (
-                <p className="text-[10px] text-red-500 -mt-2 mb-2">{errors.firstName}</p>
+                <p className="text-[10px] text-red-500 -mt-2 mb-2">
+                  {errors.firstName}
+                </p>
               )}
             </div>
             <div>
@@ -301,7 +330,9 @@ const CompleteProfilePage = () => {
                 }}
               />
               {errors.lastName && (
-                <p className="text-[10px] text-red-500 -mt-2 mb-2">{errors.lastName}</p>
+                <p className="text-[10px] text-red-500 -mt-2 mb-2">
+                  {errors.lastName}
+                </p>
               )}
             </div>
           </div>
@@ -337,11 +368,26 @@ const CompleteProfilePage = () => {
 
             {/* Password checklist */}
             <div className="mt-2 grid grid-cols-2 gap-1">
-              <ValidationItem label="8+ Characters" met={passwordRequirements.length} />
-              <ValidationItem label="Uppercase" met={passwordRequirements.capital} />
-              <ValidationItem label="Lowercase" met={passwordRequirements.lower} />
-              <ValidationItem label="Number" met={passwordRequirements.number} />
-              <ValidationItem label="Symbol" met={passwordRequirements.symbol} />
+              <ValidationItem
+                label="8+ Characters"
+                met={passwordRequirements.length}
+              />
+              <ValidationItem
+                label="Uppercase"
+                met={passwordRequirements.capital}
+              />
+              <ValidationItem
+                label="Lowercase"
+                met={passwordRequirements.lower}
+              />
+              <ValidationItem
+                label="Number"
+                met={passwordRequirements.number}
+              />
+              <ValidationItem
+                label="Symbol"
+                met={passwordRequirements.symbol}
+              />
             </div>
             {errors.password && (
               <p className="text-[10px] text-red-500 mt-1">{errors.password}</p>
@@ -373,7 +419,9 @@ const CompleteProfilePage = () => {
               ) : (
                 <span />
               )}
-              <span className="text-[10px] text-gray-400">{bio.length}/500</span>
+              <span className="text-[10px] text-gray-400">
+                {bio.length}/500
+              </span>
             </div>
           </div>
         )}
@@ -386,9 +434,24 @@ const CompleteProfilePage = () => {
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
-              <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              <svg
+                className="animate-spin h-4 w-4 text-white"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
               </svg>
               Saving...
             </span>

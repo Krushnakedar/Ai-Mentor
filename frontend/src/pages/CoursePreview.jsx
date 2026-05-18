@@ -208,7 +208,11 @@ export default function CoursePreview() {
       navigate("/login");
       return;
     }
-    const title = safeGet(courseMeta, "title", safeGet(learningData, "course.title", "Course"));
+    const title = safeGet(
+      courseMeta,
+      "title",
+      safeGet(learningData, "course.title", "Course"),
+    );
 
     const img = heroSrc;
     const category = safeGet(courseMeta, "category", "");
@@ -230,9 +234,7 @@ export default function CoursePreview() {
     const token = localStorage.getItem("token");
     // safely extract price
     const priceValue = Number(
-      selectedCourse.priceValue ??
-      selectedCourse.price?.replace("₹", "") ??
-      0
+      selectedCourse.priceValue ?? selectedCourse.price?.replace("₹", "") ?? 0,
     );
     // FREE COURSE FLOW
     if (priceValue === 0) {
@@ -279,20 +281,23 @@ export default function CoursePreview() {
     // PAID COURSE FLOW
     try {
       setIsPurchasing(true);
-      const res = await fetch(`${API_BASE_URL}/api/payment/create-checkout-session`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          course: {
-            id: selectedCourse.id,
-            title: selectedCourse.title,
-            priceValue,
+      const res = await fetch(
+        `${API_BASE_URL}/api/payment/create-checkout-session`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        }),
-      });
+          body: JSON.stringify({
+            course: {
+              id: selectedCourse.id,
+              title: selectedCourse.title,
+              priceValue,
+            },
+          }),
+        },
+      );
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -331,13 +336,15 @@ export default function CoursePreview() {
   }
   // derive fields safely
   const title =
-    safeGet(courseMeta, "title") ||
-    safeGet(learningData, "course.title") ||
-    "";
+    safeGet(courseMeta, "title") || safeGet(learningData, "course.title") || "";
   if (!title) {
     console.error("❌ Course title missing!");
   }
-  const subtitle = safeGet(learningData, "course.subtitle", safeGet(courseMeta, "subtitle", ""));
+  const subtitle = safeGet(
+    learningData,
+    "course.subtitle",
+    safeGet(courseMeta, "subtitle", ""),
+  );
   const instructorName = safeGet(courseMeta, "instructor", "Instructor");
   const rating = safeGet(courseMeta, "rating", 4.8);
   const students = safeGet(
@@ -369,10 +376,10 @@ export default function CoursePreview() {
     : Array.isArray(safeGet(learningData, "course.keyTakeaways", null))
       ? safeGet(learningData, "course.keyTakeaways", [])
       : [
-        "Understand core concepts and practical workflows",
-        "Build real-world projects and examples",
-        "Apply industry tools and best practices",
-      ];
+          "Understand core concepts and practical workflows",
+          "Build real-world projects and examples",
+          "Apply industry tools and best practices",
+        ];
   const modules = Array.isArray(safeGet(learningData, "modules", null))
     ? safeGet(learningData, "modules", [])
     : Array.isArray(safeGet(courseMeta, "modules", null))
@@ -381,10 +388,10 @@ export default function CoursePreview() {
   const features = Array.isArray(safeGet(courseMeta, "features", null))
     ? safeGet(courseMeta, "features", [])
     : [
-      { text: "Lifetime access" },
-      { text: "Access on mobile and desktop" },
-      { text: "Certificate of completion" },
-    ];
+        { text: "Lifetime access" },
+        { text: "Access on mobile and desktop" },
+        { text: "Certificate of completion" },
+      ];
   const isPurchased =
     Array.isArray(user?.purchasedCourses) &&
     user.purchasedCourses.some((c) => Number(c.courseId) === Number(courseId));
@@ -430,8 +437,8 @@ export default function CoursePreview() {
                         Last updated{" "}
                         {safeGet(courseMeta, "updatedAt", "—")
                           ? new Date(
-                            safeGet(courseMeta, "updatedAt", Date.now()),
-                          ).toLocaleDateString()
+                              safeGet(courseMeta, "updatedAt", Date.now()),
+                            ).toLocaleDateString()
                           : "—"}
                       </div>
                     </div>
@@ -539,11 +546,11 @@ export default function CoursePreview() {
                                     return acc + (m ? Number(m[0]) : 0);
                                   }, 0) > 0
                                     ? `${lessons.reduce((acc, l) => {
-                                      const m = (
-                                        safeGet(l, "duration", "") || ""
-                                      ).match(/\d+/);
-                                      return acc + (m ? Number(m[0]) : 0);
-                                    }, 0)}m`
+                                        const m = (
+                                          safeGet(l, "duration", "") || ""
+                                        ).match(/\d+/);
+                                        return acc + (m ? Number(m[0]) : 0);
+                                      }, 0)}m`
                                     : ""}
                                 </div>
                                 {isOpen ? (
@@ -760,7 +767,9 @@ export default function CoursePreview() {
               {selectedCourse.category} • {selectedCourse.level}
             </p>
             <div className="flex justify-between items-center mt-4">
-              <span className="line-through text-muted">{selectedCourse.price}</span>
+              <span className="line-through text-muted">
+                {selectedCourse.price}
+              </span>
               <span className="text-lg font-bold text-green-600">
                 {selectedCourse.price}
               </span>

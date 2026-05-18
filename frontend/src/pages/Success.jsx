@@ -15,29 +15,25 @@ const Success = () => {
       hasSaved.current = true;
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(
-          `${API_BASE_URL}/api/users/purchase-course`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              courseId: Number(courseId),
-              courseTitle,
-            }),
-          }
-        );
+        const res = await fetch(`${API_BASE_URL}/api/users/purchase-course`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            courseId: Number(courseId),
+            courseTitle,
+          }),
+        });
         const data = await res.json();
         if (!res.ok) {
           console.error("Purchase failed:", data.message);
         } else {
           // ✅ Notify Header to refetch notifications (updates unread count instantly)
           setTimeout(() => {
-  window.dispatchEvent(new Event("refreshNotifications"));
-}, 300);
-
+            window.dispatchEvent(new Event("refreshNotifications"));
+          }, 300);
         }
         // ✅ small delay for UX
         setTimeout(() => {
@@ -58,9 +54,7 @@ const Success = () => {
       <h1 className="text-xl font-bold text-green-600">
         Payment Successful 🎉
       </h1>
-      <p className="text-gray-500">
-        Enrolling you into the course...
-      </p>
+      <p className="text-gray-500">Enrolling you into the course...</p>
     </div>
   );
 };
