@@ -449,7 +449,9 @@ const Dashboard = () => {
                     </p>
 
                     <div className="flex justify-between items-center mt-2">
-                      <span className="font-bold text-green-500">₹0</span>
+                      <span className="font-bold text-green-500">
+                        {course.price}
+                      </span>
 
                       <button
                         onClick={() => navigate(`/course-preview/${course.id}`)}
