@@ -450,7 +450,7 @@ const Dashboard = () => {
 
                     <div className="flex justify-between items-center mt-2">
                       <span className="font-bold text-green-500">
-                        {course.price}
+                        ₹{course.priceValue}
                       </span>
 
                       <button
