@@ -1001,7 +1001,7 @@ const Analytics = () => {
         )}
       </main>
 
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
         }

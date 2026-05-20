@@ -33,6 +33,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const { user, fetchUserProfile } = useAuth();
   const navigate = useNavigate();
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -44,6 +45,7 @@ const Dashboard = () => {
           "Content-Type": "application/json",
         };
 
+<<<<<<< HEAD
         const [coursesRes, statsRes] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/courses`, {
             headers,
@@ -52,8 +54,21 @@ const Dashboard = () => {
             `${import.meta.env.VITE_API_BASE_URL}/api/courses/stats/cards`,
             { headers },
           ),
+=======
+        const [coursesRes, statsRes,res] = await Promise.all([
+          fetch("/api/courses", { headers }),
+          fetch("/api/courses/stats/cards", { headers }),
+          fetch("/api/certificate/list", {headers}),
+>>>>>>> upstream/main
         ]);
 
+        if (res.ok) {
+          const json = await res.json();
+          setData(json);
+        }
+         if (!res.ok) {
+          console.error(`Failed to fetch certificates: ${res.status}`);
+        }
         if (!coursesRes.ok) {
           throw new Error(`Courses API failed: ${coursesRes.status}`);
         }
@@ -63,9 +78,6 @@ const Dashboard = () => {
 
         const allCourses = await coursesRes.json();
         const { statsCards } = await statsRes.json();
-
-        console.log("Fetched allCourses:", allCourses);
-        console.log("Fetched statsCards:", statsCards);
 
         setCoursesData({ allCourses, statsCards });
         await fetchUserProfile();
@@ -79,11 +91,7 @@ const Dashboard = () => {
 
     fetchAllData();
   }, []);
-
   const calculateStats = () => {
-    console.log("Calculating stats with user:", user);
-    console.log("coursesData:", coursesData);
-
     if (
       !user?.purchasedCourses ||
       !coursesData.statsCards ||
@@ -92,7 +100,7 @@ const Dashboard = () => {
       return [
         {
           icon: <Play className="w-5 h-5 text-blue-600" />,
-          value: "0",
+          value: data?.stats?.inProgress ?? 0,
           label: "Ongoing Courses",
           change: "+0%",
           bgColor: "bg-blue-50",
@@ -100,7 +108,7 @@ const Dashboard = () => {
         },
         {
           icon: <CheckCircle className="w-5 h-5 text-green-600" />,
-          value: "0",
+          value: data?.stats?.completed ?? 0,
           label: "Completed",
           change: "+0",
           bgColor: "bg-green-50",
@@ -108,7 +116,7 @@ const Dashboard = () => {
         },
         {
           icon: <Award className="w-5 h-5 text-purple-600" />,
-          value: "0",
+          value:data?.stats?.certificatesEarned ?? 0,
           label: "Certificates",
           change: "+0",
           bgColor: "bg-purple-50",
@@ -147,7 +155,7 @@ const Dashboard = () => {
 
         if (completedLessons === totalLessons && totalLessons > 0) {
           completedCourses++;
-        } else if (completedLessons > 0) {
+        } else {
           coursesInProgress++;
         }
       }
@@ -155,31 +163,27 @@ const Dashboard = () => {
 
     const result = [
       {
-        ...coursesData.statsCards[0],
+        ...baseCards[0],
         value: coursesInProgress.toString(),
       },
       {
-        ...coursesData.statsCards[1],
+        ...baseCards[1],
         value: completedCourses.toString(),
       },
       {
-        ...coursesData.statsCards[2],
+        ...baseCards[2],
         value: certificates.toString(),
       },
       {
-        ...coursesData.statsCards[3],
+        ...baseCards[3],
         value: `${totalHours}h`,
       },
     ];
 
-    console.log("Calculated stats result:", result);
     return result;
   };
 
   const dynamicStatsCards = calculateStats();
-
-  console.log("Creating myCourses with user:", user);
-  console.log("coursesData.allCourses:", coursesData.allCourses);
 
   const myCourses = coursesData.allCourses
     .filter((course) =>
@@ -221,13 +225,8 @@ const Dashboard = () => {
         progressColor: "bg-indigo-600",
       };
 
-      console.log("Mapped course:", courseData);
       return courseData;
     });
-
-  console.log("Final myCourses:", myCourses);
-
-  console.log("Creating continueLearning");
 
   const continueLearning = coursesData.allCourses
     .filter((course) =>
@@ -282,8 +281,6 @@ const Dashboard = () => {
         image: course.image,
         progressColor: progress > 75 ? "bg-cyan-600" : "bg-orange-400",
       };
-
-      console.log("Mapped continueLearning item:", continueData);
       return continueData;
     });
 
@@ -313,8 +310,6 @@ const Dashboard = () => {
       course.level?.toLowerCase().includes(normalizedSearchQuery)
     );
   });
-
-  console.log("Final continueLearning:", continueLearning);
 
   const handleBrowseCourses = () => {
     navigate("/courses", { state: { activeTab: "explore" } });
@@ -414,12 +409,20 @@ const Dashboard = () => {
             {/* Slider */}
             <div
               id="courseSlider"
+<<<<<<< HEAD
               className="flex gap-6 overflow-x-auto pb-4 scroll-smooth"
+=======
+              className="flex gap-6 overflow-x-auto px-3 py-3 pb-6"
+>>>>>>> upstream/main
             >
               {coursesData.allCourses.slice(0, 10).map((course, index) => (
                 <div
                   key={index}
+<<<<<<< HEAD
                   className="bg-card rounded-xl border border-border w-64 flex-shrink-0 shadow-sm"
+=======
+                  className="bg-card rounded-xl border border-border w-64 flex-shrink-0 shadow-sm transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-2 hover:scale-[1.03] hover:border-teal-400/50"
+>>>>>>> upstream/main
                 >
                   {/* Image */}
                   <div className="relative h-40">
@@ -450,7 +453,13 @@ const Dashboard = () => {
 
                     <div className="flex justify-between items-center mt-2">
                       <span className="font-bold text-green-500">
+<<<<<<< HEAD
                         ₹{course.priceValue}
+=======
+                        {course.priceValue === 0
+                          ? "Free"
+                          : `₹${course.priceValue}`}
+>>>>>>> upstream/main
                       </span>
 
                       <button
@@ -577,6 +586,7 @@ const Dashboard = () => {
                       ))}
                     </div>
                   </div>
+<<<<<<< HEAD
                 ) : (
                   <div className="p-6 text-center text-muted">
                     <p>
@@ -592,10 +602,14 @@ const Dashboard = () => {
                     </button>
                   </div>
                 )}
+=======
+                ) : null}
+>>>>>>> upstream/main
               </div>
             </div>
 
             {/* Continue Learning */}
+<<<<<<< HEAD
             {
               filteredContinueLearning.length !== 0 ? (
                 <div>
@@ -658,6 +672,69 @@ const Dashboard = () => {
               //     My Courses
               //   </button>
               // </div>
+=======
+            {filteredContinueLearning.length !== 0 ? (
+              <div>
+                <h2 className="text-xl font-bold text-main mt-6 mb-6">
+                  {t("dashboard.continue_learning")}
+                </h2>
+                <div className="space-y-4">
+                  {filteredContinueLearning.map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-center">
+                        <Link
+                          to={`/course-preview/${item.id}`}
+                          className="flex items-center flex-1"
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-12 h-12 rounded-lg mr-4"
+                          />
+                          <div className="flex-1">
+                            <h3 className="font-medium text-main mb-1 hover:text-teal-600">
+                              {item.title}
+                            </h3>
+                            <p className="text-sm text-muted mb-2">
+                              {item.lesson}
+                            </p>
+                            <div className="w-full bg-border rounded-full h-2 mb-2">
+                              <div
+                                className={`h-2 rounded-full ${item.progressColor}`}
+                                style={{ width: `${item.progress}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </Link>
+                        <Link
+                          to={`/learning/${item.id}`}
+                          className="ml-4 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600"
+                        >
+                          {t("dashboard.continue")}
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null
+            // <div className="p-6  text-muted">
+            //   <p>
+            //     {normalizedSearchQuery
+            //       ? "No in-progress courses match your search."
+            //       : "Start Learning to get your progress tracked!"}
+            //   </p>
+            //   <button
+            //     className="mt-4 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600"
+            //     onClick={() => navigate("/courses")}
+            //   >
+            //     My Courses
+            //   </button>
+            // </div>
+>>>>>>> upstream/main
             }
           </div>
         </div>

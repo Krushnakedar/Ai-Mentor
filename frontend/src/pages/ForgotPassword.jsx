@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { Mail, ArrowLeft } from "lucide-react";
 import AuthLayout from "../components/auth/AuthLayout";
 import axios from "axios";
+import { z } from "zod";
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +21,7 @@ const ForgotPassword = () => {
     setMessage("");
     setError("");
 
+<<<<<<< HEAD
     try {
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`,
@@ -35,6 +41,25 @@ const ForgotPassword = () => {
       setLoading(false);
     }
   };
+=======
+        try {
+            const validationResult = forgotPasswordSchema.parse({ email });
+            await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`, {
+                email: validationResult.email,
+            });
+
+            setMessage("If an account exists for " + email + ", you will receive a password reset link shortly.");
+        } catch (err) {
+            if (err instanceof z.ZodError) {
+                setError(err.errors[0].message);
+            } else {
+                setError(err.response?.data?.message || err.message);
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+>>>>>>> upstream/main
 
   return (
     <AuthLayout
