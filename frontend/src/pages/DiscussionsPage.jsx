@@ -263,21 +263,21 @@ const DiscussionsPage = () => {
     [token],
   );
 
-const latestPostsByCourse = Object.values(
-  coursePosts
-    .filter((post) => isAdmin || !post.hiddenAt)
-    .reduce((acc, post) => {
-      if (!post.courseId) return acc;
+  const latestPostsByCourse = Object.values(
+    coursePosts
+      .filter((post) => isAdmin || !post.hiddenAt)
+      .reduce((acc, post) => {
+        if (!post.courseId) return acc;
 
-      // First occurrence = latest (because order based on createdAt attribute)
-      if (!acc[post.courseId]) {
-        acc[post.courseId] = post;
-      }
+        // First occurrence = latest (because order based on createdAt attribute)
+        if (!acc[post.courseId]) {
+          acc[post.courseId] = post;
+        }
 
-      return acc;
-    }, {})
-);
-  
+        return acc;
+      }, {}),
+  );
+
   // Course panel - posts for a specific course
   const fetchPanelPosts = useCallback(
     async (courseId, sort) => {
@@ -884,88 +884,116 @@ const latestPostsByCourse = Object.values(
 
   return (
     <>
-        <div className="relative overflow-hidden bg-linear-to-br from-teal-700 via-teal-600 to-teal-800 pt-14 sm:pt-16 pb-10 sm:pb-12 px-3 sm:px-6 md:px-8">
-          {/* grid pattern overlay */}
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-          <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4">
-            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-              {activeView === "courseCommunity" ? (
-                <>
-                  {t("discussions.course_communities").split(" ")[0]}{" "}
-                  <span className="text-yellow-400">
-                    {t("discussions.course_communities")
-                      .split(" ")
-                      .slice(1)
-                      .join(" ")}
-                  </span>
-                </>
-              ) : (
-                <span className="text-orange-400">
-                  {t("discussions.global_title")}
+      <div className="relative overflow-hidden bg-linear-to-br from-teal-700 via-teal-600 to-teal-800 pt-14 sm:pt-16 pb-10 sm:pb-12 px-3 sm:px-6 md:px-8">
+        {/* grid pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+            {activeView === "courseCommunity" ? (
+              <>
+                {t("discussions.course_communities").split(" ")[0]}{" "}
+                <span className="text-yellow-400">
+                  {t("discussions.course_communities")
+                    .split(" ")
+                    .slice(1)
+                    .join(" ")}
                 </span>
-              )}
-            </h1>
-            <p className="text-teal-100 text-xs sm:text-sm md:text-base max-w-md sm:max-w-xl mx-auto">
-              {t("discussions.global_subtitle")}
-            </p>
-            {/* Tabs */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 pt-2 px-2 sm:px-4">
-              <button
-                onClick={() => setActiveView("courseCommunity")}
-                className={`flex items-center gap-2 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all ${
-                  activeView === "courseCommunity"
-                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-                    : "bg-black/30 text-white hover:bg-black/40"
-                }`}
-              >
-                <BookOpen className="w-4 h-4" />
-                {t("discussions.course_communities")}
-              </button>
-              <button
-                onClick={() => setActiveView("global")}
-                className={`flex items-center gap-2 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all ${
-                  activeView === "global"
-                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-                    : "bg-black/30 text-white hover:bg-black/40"
-                }`}
-              >
-                <Users className="w-4 h-4" />
-                {t("discussions.global_btn")}
-              </button>
-            </div>
+              </>
+            ) : (
+              <span className="text-orange-400">
+                {t("discussions.global_title")}
+              </span>
+            )}
+          </h1>
+          <p className="text-teal-100 text-xs sm:text-sm md:text-base max-w-md sm:max-w-xl mx-auto">
+            {t("discussions.global_subtitle")}
+          </p>
+          {/* Tabs */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 pt-2 px-2 sm:px-4">
+            <button
+              onClick={() => setActiveView("courseCommunity")}
+              className={`flex items-center gap-2 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all ${
+                activeView === "courseCommunity"
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                  : "bg-black/30 text-white hover:bg-black/40"
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              {t("discussions.course_communities")}
+            </button>
+            <button
+              onClick={() => setActiveView("global")}
+              className={`flex items-center gap-2 px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all ${
+                activeView === "global"
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                  : "bg-black/30 text-white hover:bg-black/40"
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              {t("discussions.global_btn")}
+            </button>
           </div>
         </div>
       </div>
+      {/* </div>      */}
 
-        <div className="flex-1 flex relative">
-          {activeView === "courseCommunity" && (
-           <main className="flex-1 p-3 sm:p-5 md:p-6 overflow-y-auto">
-              <div
-                className={`max-w-full lg:max-w-5xl mx-auto px-1 sm:px-2 ${
-                  selectedCourse ? "xl:mr-105" : ""
-                }`}
-              >
-                {/* header row */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2">
-                    <MessageCircle className="w-5 h-5 text-indigo-500" />
-                    <h2 className="text-xl font-bold text-main">
-                      {t("discussions.recent")}{" "}
-                      <span className="text-muted font-normal text-base">
-                        ({coursePosts.length})
-                      </span>
-                    </h2>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-muted" />
-                    {["Recent", "Popular"].map((s) => (
+      <div className="flex-1 flex relative">
+        {activeView === "courseCommunity" && (
+          <main className="flex-1 p-3 sm:p-5 md:p-6 overflow-y-auto">
+            <div
+              className={`max-w-full lg:max-w-5xl mx-auto px-1 sm:px-2 ${
+                selectedCourse ? "xl:mr-105" : ""
+              }`}
+            >
+              {/* header row */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-indigo-500" />
+                  <h2 className="text-xl font-bold text-main">
+                    {t("discussions.recent")}{" "}
+                    <span className="text-muted font-normal text-base">
+                      ({coursePosts.length})
+                    </span>
+                  </h2>
+                </div>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-muted" />
+                  {["Recent", "Popular"].map((s) => (
+                    <button
+                      key={c.id}
+                      onClick={() =>
+                        setSelectedCourse({
+                          courseId: c.id,
+                          courseName: c.title,
+                        })
+                      }
+                      className="bg-card border border-border rounded-xl p-4 text-left hover:border-indigo-500 transition-colors"
+                    >
+                      <h3 className="font-semibold text-main">{c.title}</h3>
+                      <p className="text-xs text-muted mt-1">{c.category}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* grid of discussion cards */}
+              {coursePostsLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                  <p className="text-muted">{t("discussions.loading")}</p>
+                </div>
+              ) : coursePosts.length === 0 ? (
+                <div className="text-center py-12 text-muted">
+                  {t("discussions.no_course")}
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {allCourses.map((c) => (
                       <button
                         key={c.id}
                         onClick={() =>
@@ -982,104 +1010,73 @@ const latestPostsByCourse = Object.values(
                     ))}
                   </div>
                 </div>
-
-                {/* grid of discussion cards */}
-                {coursePostsLoading ? (
-                  <div className="text-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-                    <p className="text-muted">{t("discussions.loading")}</p>
-                  </div>
-                ) : coursePosts.length === 0 ? (
-                  <div className="text-center py-12 text-muted">
-                    {t("discussions.no_course")}
-                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {allCourses.map((c) => (
-                        <button
-                          key={c.id}
-                          onClick={() =>
-                            setSelectedCourse({
-                              courseId: c.id,
-                              courseName: c.title,
-                            })
-                          }
-                          className="bg-card border border-border rounded-xl p-4 text-left hover:border-indigo-500 transition-colors"
-                        >
-                          <h3 className="font-semibold text-main">{c.title}</h3>
-                          <p className="text-xs text-muted mt-1">
-                            {c.category}
-                          </p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                      {latestPostsByCourse
-                        .map((post) => (
-                        <div
-                          key={post.id}
-                          onClick={() =>
-                            setSelectedCourse({
-                              courseId: post.courseId,
-                              courseName: courseNameForPost(post),
-                            })
-                          }
-                          className={`bg-card border border-border rounded-xl p-3 sm:p-4 md:p-5 shadow-sm hover:border-indigo-500/50 cursor-pointer transition-colors ${
-                            post.hiddenAt ? "opacity-60" : ""
-                          }`}
-                        >
-                          {isAdmin && post.hiddenAt && (
-                            <div className="flex items-center gap-2 text-xs text-yellow-500 mb-2">
-                              <EyeOff className="w-3 h-3" />
-                              Hidden by moderator
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleUnhide(post.id);
-                                }}
-                                className="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors"
-                              >
-                                Unhide
-                              </button>
-                            </div>
-                          )}
-                          <div className="flex items-start gap-3 mb-3">
-                            <Avatar
-                              src={post.author?.avatar_url}
-                              name={post.author?.name}
-                              isGoogle={post.author?.isGoogleUser}
-                              googleId={post.author?.googleId}
-                            />
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="font-semibold text-main text-sm">
-                                  {post.author?.name || "Unknown"}
-                                </span>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-600 text-white truncate max-w-35">
-                                  {courseNameForPost(post)}
-                                </span>
-                              </div>
-                              <span className="text-xs text-muted">
-                                {getRelativeTime(post.createdAt)}
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                    {latestPostsByCourse.map((post) => (
+                      <div
+                        key={post.id}
+                        onClick={() =>
+                          setSelectedCourse({
+                            courseId: post.courseId,
+                            courseName: courseNameForPost(post),
+                          })
+                        }
+                        className={`bg-card border border-border rounded-xl p-3 sm:p-4 md:p-5 shadow-sm hover:border-indigo-500/50 cursor-pointer transition-colors ${
+                          post.hiddenAt ? "opacity-60" : ""
+                        }`}
+                      >
+                        {isAdmin && post.hiddenAt && (
+                          <div className="flex items-center gap-2 text-xs text-yellow-500 mb-2">
+                            <EyeOff className="w-3 h-3" />
+                            Hidden by moderator
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUnhide(post.id);
+                              }}
+                              className="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors"
+                            >
+                              Unhide
+                            </button>
+                          </div>
+                        )}
+                        <div className="flex items-start gap-3 mb-3">
+                          <Avatar
+                            src={post.author?.avatar_url}
+                            name={post.author?.name}
+                            isGoogle={post.author?.isGoogleUser}
+                            googleId={post.author?.googleId}
+                          />
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-semibold text-main text-sm">
+                                {post.author?.name || "Unknown"}
+                              </span>
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-600 text-white truncate max-w-35">
+                                {courseNameForPost(post)}
                               </span>
                             </div>
-                          </div>
-                          <p className="text-sm text-muted line-clamp-2 mb-3">
-                            {post.content}
-                          </p>
-                          <div className="border-t border-border pt-3 flex items-center gap-4 text-muted text-xs">
-                            <span className="flex items-center gap-1">
-                              <ThumbsUp className="w-3.5 h-3.5" />
-                              {post.likes?.length || 0}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <MessageCircle className="w-3.5 h-3.5" />
-                              {post.replies?.length || 0}
+                            <span className="text-xs text-muted">
+                              {getRelativeTime(post.createdAt)}
                             </span>
                           </div>
                         </div>
-                      ))}
+                        <p className="text-sm text-muted line-clamp-2 mb-3">
+                          {post.content}
+                        </p>
+                        <div className="border-t border-border pt-3 flex items-center gap-4 text-muted text-xs">
+                          <span className="flex items-center gap-1">
+                            <ThumbsUp className="w-3.5 h-3.5" />
+                            {post.likes?.length || 0}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            {post.replies?.length || 0}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
                   {/* quick-start: select a course to start new discussion */}
@@ -1108,89 +1105,101 @@ const latestPostsByCourse = Object.values(
               )}
             </div>
 
-              {selectedCourse && (
-                <div
-                  ref={panelRef}
-                   className="fixed top-16 sm:top-18 right-0 h-[calc(100%-64px)] sm:h-[calc(100%-72px)] w-full sm:w-96 md:w-[420px] lg:w-[480px] bg-card border-l border-border shadow-2xl z-50 flex flex-col"
-                >
-                  {/* panel header */}
-                  <div className="p-3 sm:p-4 border-b border-border flex items-center justify-between shrink-0">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <MessageCircle className="w-5 h-5 text-indigo-500" />
-                        <h3 className="font-bold text-main">Community</h3>
+            {selectedCourse && (
+              <div
+                ref={panelRef}
+                className="fixed top-16 sm:top-18 right-0 h-[calc(100%-64px)] sm:h-[calc(100%-72px)] w-full sm:w-96 md:w-[420px] lg:w-[480px] bg-card border-l border-border shadow-2xl z-50 flex flex-col"
+              >
+                {/* panel header */}
+                <div className="p-3 sm:p-4 border-b border-border flex items-center justify-between shrink-0">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="w-5 h-5 text-indigo-500" />
+                      <h3 className="font-bold text-main">Community</h3>
+                    </div>
+                    <p className="text-xs text-muted mt-0.5">
+                      {selectedCourse.courseName} &bull; {panelPosts.length}{" "}
+                      messages
+                    </p>
+                  </div>
+                  ) : panelPosts.length === 0 ? (
+                  <div className="text-center py-8 text-muted text-sm">
+                    {t("discussions.no_messages")}
+                  </div>
+                </div>
+
+                {/* panel sort tabs */}
+                <div className="flex border-b border-border shrink-0">
+                  {["Recent", "Popular"].map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setPanelSort(s)}
+                      className={`flex-1 py-2.5 text-sm font-medium transition-colors flex items-center justify-center gap-1.5 ${
+                        panelSort === s
+                          ? "bg-indigo-600/10 text-indigo-500 border-b-2 border-indigo-500"
+                          : "text-muted hover:text-main"
+                      }`}
+                    >
+                      {s === "Recent" ? (
+                        <Clock className="w-3.5 h-3.5" />
+                      ) : (
+                        <TrendingUp className="w-3.5 h-3.5" />
+                      )}
+                      {s === "Recent"
+                        ? t("discussions.sort_recent")
+                        : t("discussions.sort_popular")}
+                    </button>
+                  ))}
+                </div>
+
+                {/* panel messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {panelRequiresEnrollment ? (
+                    <div className="flex flex-col items-center justify-center h-full py-12">
+                      <div className="text-center space-y-4">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500/20 rounded-full">
+                          <BookOpen className="w-8 h-8 text-orange-500" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-main mb-2">
+                            Enroll to Access Community
+                          </h3>
+                          <p className="text-sm text-muted mb-4">
+                            You must be enrolled in{" "}
+                            <span className="font-medium">
+                              {selectedCourse.courseName}
+                            </span>{" "}
+                            to view and participate in discussions.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() =>
+                            navigate(`/courses`, {
+                              state: { activeTab: "explore" },
+                            })
+                          }
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
+                        >
+                          Explore Courses
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
                       </div>
-                      <p className="text-xs text-muted mt-0.5">
-                        {selectedCourse.courseName} &bull; {panelPosts.length}{" "}
-                        messages
+                    </div>
+                  ) : panelLoading ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-3"></div>
+                      <p className="text-muted text-sm">
+                        {t("common.loading")}
                       </p>
                     </div>
                   ) : panelPosts.length === 0 ? (
                     <div className="text-center py-8 text-muted text-sm">
                       {t("discussions.no_messages")}
                     </div>
-                  </div>
-
-                  {/* panel sort tabs */}
-                  <div className="flex border-b border-border shrink-0">
-                    {["Recent", "Popular"].map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setPanelSort(s)}
-                        className={`flex-1 py-2.5 text-sm font-medium transition-colors flex items-center justify-center gap-1.5 ${
-                          panelSort === s
-                            ? "bg-indigo-600/10 text-indigo-500 border-b-2 border-indigo-500"
-                            : "text-muted hover:text-main"
-                        }`}
-                      >
-                        {s === "Recent" ? (
-                          <Clock className="w-3.5 h-3.5" />
-                        ) : (
-                          <TrendingUp className="w-3.5 h-3.5" />
-                        )}
-                        {s === "Recent"
-                          ? t("discussions.sort_recent")
-                          : t("discussions.sort_popular")}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* panel messages */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {panelRequiresEnrollment ? (
-                      <div className="flex flex-col items-center justify-center h-full py-12">
-                        <div className="text-center space-y-4">
-                          <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500/20 rounded-full">
-                            <BookOpen className="w-8 h-8 text-orange-500" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-main mb-2">Enroll to Access Community</h3>
-                            <p className="text-sm text-muted mb-4">
-                              You must be enrolled in <span className="font-medium">{selectedCourse.courseName}</span> to view and participate in discussions.
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => navigate(`/courses`, { state: { activeTab: "explore" } })}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
-                          >
-                            Explore Courses
-                            <ArrowRight className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ) : panelLoading ? (
-                      <div className="text-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-3"></div>
-                        <p className="text-muted text-sm">{t("common.loading")}</p>
-                      </div>
-                    ) : panelPosts.length === 0 ? (
-                      <div className="text-center py-8 text-muted text-sm">
-                        {t("discussions.no_messages")}
-                      </div>
-                    ) : (
-                      panelPosts
-                        .filter((post) => isAdmin || !post.hiddenAt)
-                        .map((post) => (
+                  ) : (
+                    panelPosts
+                      .filter((post) => isAdmin || !post.hiddenAt)
+                      .map((post) => (
                         <div
                           key={post.id}
                           data-post-id={post.id}
@@ -1720,57 +1729,57 @@ const latestPostsByCourse = Object.values(
                   )}
                 </div>
 
-                  {/* panel input */}
-                  <div className="p-2 sm:p-3 border-t border-border shrink-0">
-                    <div className="flex items-center gap-2">
-                      <Smile className="w-5 h-5 text-muted shrink-0" />
-                      <input
-                        type="text"
-                        placeholder={t("discussions.share_thoughts")}
-                        value={panelReplyText}
-                        onChange={(e) => {
-                          if (e.target.value.length <= 1000)
-                            setPanelReplyText(e.target.value);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            handlePanelPost(panelReplyText);
-                          }
-                        }}
-                        className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 bg-input border border-border rounded-lg text-xs sm:text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      />
-                      <button
-                        onClick={() => handlePanelPost(panelReplyText)}
-                        className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-1.5"
-                      >
-                        <Send className="w-3.5 h-3.5" />
-                        {t("discussions.send")}
-                      </button>
-                    </div>
-                    <div className="text-right text-[11px] text-muted mt-1">
-                      {panelReplyText.length}/1000 characters
-                    </div>
+                {/* panel input */}
+                <div className="p-2 sm:p-3 border-t border-border shrink-0">
+                  <div className="flex items-center gap-2">
+                    <Smile className="w-5 h-5 text-muted shrink-0" />
+                    <input
+                      type="text"
+                      placeholder={t("discussions.share_thoughts")}
+                      value={panelReplyText}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 1000)
+                          setPanelReplyText(e.target.value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handlePanelPost(panelReplyText);
+                        }
+                      }}
+                      className="flex-1 px-2 sm:px-3 py-1.5 sm:py-2 bg-input border border-border rounded-lg text-xs sm:text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <button
+                      onClick={() => handlePanelPost(panelReplyText)}
+                      className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-1.5"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      {t("discussions.send")}
+                    </button>
+                  </div>
+                  <div className="text-right text-[11px] text-muted mt-1">
+                    {panelReplyText.length}/1000 characters
                   </div>
                 </div>
               </div>
+              // </div>
             )}
           </main>
         )}
 
-          {activeView === "global" && (
-            <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
-              <div className="max-w-full sm:max-w-3xl md:max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2">
-                {/* Welcome Banner */}
-                {showWelcome && (
-                  <div className="relative bg-linear-to-r from-red-900/30 to-orange-900/30 border border-orange-500/30 rounded-xl p-5">
-                    {/* Close Button */}
-                    <button
-                      onClick={() => setShowWelcome(false)}
-                      className="absolute top-3 right-3 text-white hover:text-orange-300 transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
+        {activeView === "global" && (
+          <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+            <div className="max-w-full sm:max-w-3xl md:max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2">
+              {/* Welcome Banner */}
+              {showWelcome && (
+                <div className="relative bg-linear-to-r from-red-900/30 to-orange-900/30 border border-orange-500/30 rounded-xl p-5">
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setShowWelcome(false)}
+                    className="absolute top-3 right-3 text-white hover:text-orange-300 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
 
                   <div className="flex items-start gap-3">
                     <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-500 to-red-500 flex items-center justify-center shrink-0">
@@ -1828,31 +1837,36 @@ const latestPostsByCourse = Object.values(
                 </div>
               )}
 
-                {/* Post Composer */}
-                <form
-                  onSubmit={handleGlobalPost}
-                  className="bg-card border border-border rounded-xl p-5 shadow-sm"
-                >
-                  <div className="flex items-start gap-3">
-                    <Avatar src={user?.avatar_url} name={user?.name} isGoogle={user?.isGoogleUser} googleId={user?.googleId} />
-                    <textarea
-                      value={globalContent}
-                      onChange={(e) => {
-                        if (e.target.value.length <= 1000)
-                          setGlobalContent(e.target.value);
-                      }}
-                      placeholder={t("discussions.post_placeholder")}
-                      rows={4}
-                     className="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-input border border-border rounded-lg text-xs sm:text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
-                    />
-                  </div>
-                  <div className="flex items-center justify-between mt-3 flex-wrap gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <select
-                          value={globalCategory}
-                          onChange={(e) => setGlobalCategory(e.target.value)}
-                          className="
+              {/* Post Composer */}
+              <form
+                onSubmit={handleGlobalPost}
+                className="bg-card border border-border rounded-xl p-5 shadow-sm"
+              >
+                <div className="flex items-start gap-3">
+                  <Avatar
+                    src={user?.avatar_url}
+                    name={user?.name}
+                    isGoogle={user?.isGoogleUser}
+                    googleId={user?.googleId}
+                  />
+                  <textarea
+                    value={globalContent}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 1000)
+                        setGlobalContent(e.target.value);
+                    }}
+                    placeholder={t("discussions.post_placeholder")}
+                    rows={4}
+                    className="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-input border border-border rounded-lg text-xs sm:text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+                  />
+                </div>
+                <div className="flex items-center justify-between mt-3 flex-wrap gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <select
+                        value={globalCategory}
+                        onChange={(e) => setGlobalCategory(e.target.value)}
+                        className="
     appearance-none
     pl-4 pr-10 py-2
     bg-[#ff6d34]
@@ -2583,198 +2597,204 @@ const latestPostsByCourse = Object.values(
             </div>
           </main>
         )}
-      </div>
+        {/* </div> */}
 
-      {/* Popup Modal */}
-      {popupModal.open && (
-        <div className="fixed inset-0 z-160 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4">
-          <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <h3 className="font-bold text-main text-base">
-                {popupModal.title || "Notice"}
-              </h3>
-              <button
-                onClick={closePopupModal}
-                className="text-muted hover:text-main transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="px-4 py-5">
-              <p className="text-sm text-muted">{popupModal.message}</p>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 px-4 pb-4">
-              {popupModal.cancelText && (
+        {/* Popup Modal */}
+        {popupModal.open && (
+          <div className="fixed inset-0 z-160 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4">
+            <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h3 className="font-bold text-main text-base">
+                  {popupModal.title || "Notice"}
+                </h3>
                 <button
                   onClick={closePopupModal}
+                  className="text-muted hover:text-main transition-colors"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="px-4 py-5">
+                <p className="text-sm text-muted">{popupModal.message}</p>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 px-4 pb-4">
+                {popupModal.cancelText && (
+                  <button
+                    onClick={closePopupModal}
+                    className="px-4 py-2 text-sm font-medium text-muted border border-border rounded-lg hover:text-main hover:border-main/30 transition-colors"
+                  >
+                    {popupModal.cancelText}
+                  </button>
+                )}
+                <button
+                  onClick={handlePopupConfirm}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    popupModal.cancelText
+                      ? "bg-red-500 text-white hover:bg-red-600"
+                      : "bg-orange-500 text-white hover:bg-orange-600"
+                  }`}
+                >
+                  {popupModal.confirmText || "OK"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {reportModal.open && (
+          <div className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-md">
+              {/* Header */}
+              <div className="px-5 pt-5 pb-1">
+                <h3 className="font-bold text-main text-lg">Report Content</h3>
+                <p className="text-muted text-sm mt-1">
+                  Help us maintain a safe community. Please provide a reason for
+                  reporting.
+                </p>
+              </div>
+
+              {/* Body */}
+
+              <div className="px-5 py-4">
+                <textarea
+                  value={reportDescription}
+                  onChange={(e) => setReportDescription(e.target.value)}
+                  placeholder="Describe the issue (spam, harassment, inappropriate content, etc.)"
+                  rows={4}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+                />
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-end gap-3 px-5 pb-5">
+                <button
+                  onClick={() => {
+                    setReportModal({
+                      open: false,
+                      postId: null,
+                      replyId: null,
+                    });
+                    setReportDescription("");
+                  }}
                   className="px-4 py-2 text-sm font-medium text-muted border border-border rounded-lg hover:text-main hover:border-main/30 transition-colors"
                 >
-                  {popupModal.cancelText}
+                  Cancel
                 </button>
-              )}
-              <button
-                onClick={handlePopupConfirm}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  popupModal.cancelText
-                    ? "bg-red-500 text-white hover:bg-red-600"
-                    : "bg-orange-500 text-white hover:bg-orange-600"
-                }`}
-              >
-                {popupModal.confirmText || "OK"}
-              </button>
+                <button
+                  onClick={handleReport}
+                  disabled={!reportDescription.trim() || reportSubmitting}
+                  className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {reportSubmitting ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Report"
+                  )}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {reportModal.open && (
-        <div className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-md">
-            {/* Header */}
-            <div className="px-5 pt-5 pb-1">
-              <h3 className="font-bold text-main text-lg">Report Content</h3>
-              <p className="text-muted text-sm mt-1">
-                Help us maintain a safe community. Please provide a reason for
-                reporting.
-              </p>
-            </div>
+        )}
 
-            {/* Body */}
-
-            <div className="px-5 py-4">
-              <textarea
-                value={reportDescription}
-                onChange={(e) => setReportDescription(e.target.value)}
-                placeholder="Describe the issue (spam, harassment, inappropriate content, etc.)"
-                rows={4}
-                className="w-full px-3 py-2 bg-input border border-border rounded-lg text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
-              />
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-end gap-3 px-5 pb-5">
-              <button
-                onClick={() => {
-                  setReportModal({ open: false, postId: null, replyId: null });
-                  setReportDescription("");
-                }}
-                className="px-4 py-2 text-sm font-medium text-muted border border-border rounded-lg hover:text-main hover:border-main/30 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReport}
-                disabled={!reportDescription.trim() || reportSubmitting}
-                className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {reportSubmitting ? (
-                  <>
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit Report"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {reportSuccess && (
-        <div className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-sm">
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <h3 className="font-bold text-main text-base">Report</h3>
-              <button
-                onClick={() => setReportSuccess(false)}
-                className="text-muted hover:text-main transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="px-4 py-5 text-center space-y-3">
-              {/* Illustration */}
-              <div className="flex justify-center">
-                <div className="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center">
-                  <Flag className="w-8 h-8 text-orange-500" />
-                </div>
+        {reportSuccess && (
+          <div className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-sm">
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h3 className="font-bold text-main text-base">Report</h3>
+                <button
+                  onClick={() => setReportSuccess(false)}
+                  className="text-muted hover:text-main transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              <h4 className="text-base font-bold text-main">
-                Thanks for helping our community
-              </h4>
-              <p className="text-xs text-muted">
-                Your report helps us protect the community from harmful content.
-              </p>
-              <p className="text-xs text-muted">
-                If you think someone is in immediate danger, please contact
-                local law enforcement.
-              </p>
-
-              {/* What you can expect */}
-              <div className="text-left mt-3">
-                <h5 className="text-xs font-bold text-main mb-2">
-                  What you can expect
-                </h5>
-                <div className="flex items-start gap-2.5 bg-canvas-alt rounded-lg p-2.5">
-                  <div className="w-7 h-7 rounded-full bg-red-500/15 flex items-center justify-center shrink-0">
-                    <Ban className="w-3.5 h-3.5 text-red-500" />
+              {/* Body */}
+              <div className="px-4 py-5 text-center space-y-3">
+                {/* Illustration */}
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center">
+                    <Flag className="w-8 h-8 text-orange-500" />
                   </div>
-                  <p className="text-[11px] text-muted leading-relaxed">
-                    If this commenter has serious or repeated violations, we may
-                    temporarily restrict their ability to leave comments.
-                  </p>
+                </div>
+
+                <h4 className="text-base font-bold text-main">
+                  Thanks for helping our community
+                </h4>
+                <p className="text-xs text-muted">
+                  Your report helps us protect the community from harmful
+                  content.
+                </p>
+                <p className="text-xs text-muted">
+                  If you think someone is in immediate danger, please contact
+                  local law enforcement.
+                </p>
+
+                {/* What you can expect */}
+                <div className="text-left mt-3">
+                  <h5 className="text-xs font-bold text-main mb-2">
+                    What you can expect
+                  </h5>
+                  <div className="flex items-start gap-2.5 bg-canvas-alt rounded-lg p-2.5">
+                    <div className="w-7 h-7 rounded-full bg-red-500/15 flex items-center justify-center shrink-0">
+                      <Ban className="w-3.5 h-3.5 text-red-500" />
+                    </div>
+                    <p className="text-[11px] text-muted leading-relaxed">
+                      If this commenter has serious or repeated violations, we
+                      may temporarily restrict their ability to leave comments.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Footer */}
-            <div className="px-4 pb-4">
-              <button
-                onClick={() => setReportSuccess(false)}
-                className="w-full py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                OK
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {reportAlreadyExists && (
-        <div className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-sm">
-            <div className="px-5 py-6 text-center space-y-3">
-              <div className="flex justify-center">
-                <div className="w-14 h-14 rounded-full bg-yellow-500/10 flex items-center justify-center">
-                  <AlertTriangle className="w-7 h-7 text-yellow-500" />
-                </div>
+              {/* Footer */}
+              <div className="px-4 pb-4">
+                <button
+                  onClick={() => setReportSuccess(false)}
+                  className="w-full py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  OK
+                </button>
               </div>
-              <h4 className="text-base font-bold text-main">
-                Already Reported
-              </h4>
-              <p className="text-sm text-muted">
-                You have already reported this content. Our team will review it
-                shortly.
-              </p>
-            </div>
-            <div className="px-5 pb-5">
-              <button
-                onClick={() => setReportAlreadyExists(false)}
-                className="w-full py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                OK
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {reportAlreadyExists && (
+          <div className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-sm">
+              <div className="px-5 py-6 text-center space-y-3">
+                <div className="flex justify-center">
+                  <div className="w-14 h-14 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                    <AlertTriangle className="w-7 h-7 text-yellow-500" />
+                  </div>
+                </div>
+                <h4 className="text-base font-bold text-main">
+                  Already Reported
+                </h4>
+                <p className="text-sm text-muted">
+                  You have already reported this content. Our team will review
+                  it shortly.
+                </p>
+              </div>
+              <div className="px-5 pb-5">
+                <button
+                  onClick={() => setReportAlreadyExists(false)}
+                  className="w-full py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };
