@@ -373,18 +373,11 @@ export default function Settings() {
           : null;
         setSettingsData(data);
         setOriginalNotifications(notifications);
-<<<<<<< HEAD
-        if (data?.appearance?.language)
-          i18n.changeLanguage(data.appearance.language);
-      } catch (err) {
-        console.error("Failed to fetch notification settings:", err);
-=======
         if (data?.appearance?.language) i18n.changeLanguage(data.appearance.language);
       } catch (err) { 
         console.error("Failed to fetch notification settings:", err); 
       } finally {
         setPageLoading(false);
->>>>>>> upstream/main
       }
     };
     fetchNotificationSettings().finally(() => {
@@ -420,18 +413,6 @@ export default function Settings() {
   const activeMobileNav = NAV_KEYS.find((n) => n.key === mobileModalKey);
 
   /* ── shared panel renderers ── */
-<<<<<<< HEAD
-  const ProfilePanel = () => (
-    <div className="max-w-3xl">
-      <div className="hidden lg:block mb-8">
-        <h1 className="text-xl sm:text-2xl md:text-[30px] font-bold text-main font-[Inter] mb-2">
-          {t("settings.profile.title")}
-        </h1>
-        <p className="text-sm sm:text-[16px] text-muted font-[Inter]">
-          {t("settings.profile.subtitle")}
-        </p>
-      </div>
-=======
   function ProfilePanel () {
     return (
       <div className="max-w-3xl">
@@ -439,7 +420,6 @@ export default function Settings() {
           <h1 className="text-xl sm:text-2xl md:text-[30px] font-bold text-main font-[Inter] mb-2">{t("settings.profile.title")}</h1>
           <p className="text-sm sm:text-[16px] text-muted font-[Inter]">{t("settings.profile.subtitle")}</p>
         </div>
->>>>>>> upstream/main
       <div className="bg-card rounded-2xl sm:rounded-[24px] shadow-[0_4px_6px_0_rgba(0,0,0,0.10),0_10px_15px_0_rgba(0,0,0,0.10)] p-4 sm:p-5 md:p-6">
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6">
           <div className="flex flex-col items-center">
@@ -1024,43 +1004,6 @@ export default function Settings() {
     </div>
   );
 
-<<<<<<< HEAD
-  const renderPanel = (key) => {
-    switch (key) {
-      case "profile":
-        return <ProfilePanel />;
-      case "notifications":
-        return <NotificationsPanel />;
-      case "password_security":
-        return <PasswordSecurityPanel />;
-      case "preferences":
-        return (
-          <div className="w-full">
-            <div className="hidden lg:block mb-8">
-              <h1 className="text-xl sm:text-2xl md:text-[30px] font-bold text-main font-[Inter] mb-2">
-                {t("preferences.nav_title")}
-              </h1>
-              <p className="text-sm sm:text-[16px] text-muted font-[Inter]">
-                {t("preferences.settings_modal_subtitle")}
-              </p>
-            </div>
-            <Preferences
-              mode="settings"
-              onSuccess={() => toast.success(t("preferences.save_success"))}
-            />
-          </div>
-        );
-      case "appearance":
-        return <AppearancePanel />;
-      case "language":
-        return <LanguagePanel />;
-      case "contactus":
-        return <ContactPanel />;
-      default:
-        return null;
-    }
-  };
-=======
 const renderPanel = (key) => {
   switch (key) {
     case "profile":
@@ -1105,7 +1048,6 @@ const renderPanel = (key) => {
       return null;
   }
 };
->>>>>>> upstream/main
 
   if (pageLoading) {
     return (

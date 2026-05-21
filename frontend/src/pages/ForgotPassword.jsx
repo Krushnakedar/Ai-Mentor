@@ -21,27 +21,6 @@ const ForgotPassword = () => {
     setMessage("");
     setError("");
 
-<<<<<<< HEAD
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`,
-        {
-          email,
-        },
-      );
-
-      setMessage(
-        "If an account exists for " +
-          email +
-          ", you will receive a password reset link shortly.",
-      );
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-=======
         try {
             const validationResult = forgotPasswordSchema.parse({ email });
             await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`, {
@@ -59,7 +38,6 @@ const ForgotPassword = () => {
             setLoading(false);
         }
     };
->>>>>>> upstream/main
 
   return (
     <AuthLayout

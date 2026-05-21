@@ -285,14 +285,6 @@ const latestPostsByCourse = Object.values(
       setPanelRequiresEnrollment(false);
       try {
         const q = sort === "Popular" ? "?sort=popular" : "";
-<<<<<<< HEAD
-        const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/community/course/${courseId}${q}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-=======
         const res = await fetch(`/api/community/course/${courseId}${q}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -313,7 +305,6 @@ const latestPostsByCourse = Object.values(
           }
         }
 
->>>>>>> upstream/main
         if (!res.ok) throw new Error();
         setPanelPosts(await res.json());
       } catch (error) {
@@ -893,63 +884,6 @@ const latestPostsByCourse = Object.values(
 
   return (
     <>
-<<<<<<< HEAD
-      <div className="relative overflow-hidden bg-linear-to-br from-teal-700 via-teal-600 to-teal-800 pt-16 pb-12 px-4 sm:px-8">
-        {/* grid pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4">
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white">
-            {activeView === "courseCommunity" ? (
-              <>
-                {t("discussions.course_communities").split(" ")[0]}{" "}
-                <span className="text-yellow-400">
-                  {t("discussions.course_communities")
-                    .split(" ")
-                    .slice(1)
-                    .join(" ")}
-                </span>
-              </>
-            ) : (
-              <span className="text-orange-400">
-                {t("discussions.global_title")}
-              </span>
-            )}
-          </h1>
-          <p className="text-teal-100 text-sm sm:text-base max-w-xl mx-auto">
-            {t("discussions.global_subtitle")}
-          </p>
-          {/* Tabs */}
-          <div className="flex justify-center gap-3 pt-2">
-            <button
-              onClick={() => setActiveView("courseCommunity")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
-                activeView === "courseCommunity"
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-black/30 text-white hover:bg-black/40"
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              {t("discussions.course_communities")}
-            </button>
-            <button
-              onClick={() => setActiveView("global")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${
-                activeView === "global"
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-black/30 text-white hover:bg-black/40"
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              {t("discussions.global_btn")}
-            </button>
-=======
         <div className="relative overflow-hidden bg-linear-to-br from-teal-700 via-teal-600 to-teal-800 pt-14 sm:pt-16 pb-10 sm:pb-12 px-3 sm:px-6 md:px-8">
           {/* grid pattern overlay */}
           <div
@@ -1006,63 +940,10 @@ const latestPostsByCourse = Object.values(
                 {t("discussions.global_btn")}
               </button>
             </div>
->>>>>>> upstream/main
           </div>
         </div>
       </div>
 
-<<<<<<< HEAD
-      <div className="flex-1 flex relative">
-        {activeView === "courseCommunity" && (
-          <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
-            <div
-              className={`max-w-5xl mx-auto ${
-                selectedCourse ? "xl:mr-105" : ""
-              }`}
-            >
-              {/* header row */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5 text-indigo-500" />
-                  <h2 className="text-xl font-bold text-main">
-                    {t("discussions.recent")}{" "}
-                    <span className="text-muted font-normal text-base">
-                      ({coursePosts.length})
-                    </span>
-                  </h2>
-                </div>
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-muted" />
-                  {["Recent", "Popular"].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setCourseSort(s)}
-                      className={`px-4 py-1.5 text-sm rounded-md font-medium transition-colors ${
-                        courseSort === s
-                          ? "bg-red-500 text-white"
-                          : "bg-card border border-border text-muted hover:text-main"
-                      }`}
-                    >
-                      {s === "Recent"
-                        ? t("discussions.sort_recent")
-                        : t("discussions.sort_popular")}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* grid of discussion cards */}
-              {coursePostsLoading ? (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-                  <p className="text-muted">{t("discussions.loading")}</p>
-                </div>
-              ) : coursePosts.length === 0 ? (
-                <div className="text-center py-12 text-muted">
-                  {t("discussions.no_course")}
-                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {allCourses.map((c) => (
-=======
         <div className="flex-1 flex relative">
           {activeView === "courseCommunity" && (
            <main className="flex-1 p-3 sm:p-5 md:p-6 overflow-y-auto">
@@ -1085,7 +966,6 @@ const latestPostsByCourse = Object.values(
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-muted" />
                     {["Recent", "Popular"].map((s) => (
->>>>>>> upstream/main
                       <button
                         key={c.id}
                         onClick={() =>
@@ -1102,14 +982,6 @@ const latestPostsByCourse = Object.values(
                     ))}
                   </div>
                 </div>
-<<<<<<< HEAD
-              ) : (
-                <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {coursePosts
-                      .filter((post) => isAdmin || !post.hiddenAt)
-                      .map((post) => (
-=======
 
                 {/* grid of discussion cards */}
                 {coursePostsLoading ? (
@@ -1145,7 +1017,6 @@ const latestPostsByCourse = Object.values(
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                       {latestPostsByCourse
                         .map((post) => (
->>>>>>> upstream/main
                         <div
                           key={post.id}
                           onClick={() =>
@@ -1237,74 +1108,6 @@ const latestPostsByCourse = Object.values(
               )}
             </div>
 
-<<<<<<< HEAD
-            {selectedCourse && (
-              <div
-                ref={panelRef}
-                className="fixed top-18 right-0 h-[calc(100%-72px)] w-full sm:w-100 bg-card border-l border-border shadow-2xl z-50 flex flex-col"
-              >
-                {/* panel header */}
-                <div className="p-4 border-b border-border flex items-center justify-between shrink-0">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="w-5 h-5 text-indigo-500" />
-                      <h3 className="font-bold text-main">Community</h3>
-                    </div>
-                    <p className="text-xs text-muted mt-0.5">
-                      {selectedCourse.courseName} &bull; {panelPosts.length}{" "}
-                      messages
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() =>
-                        fetchPanelPosts(selectedCourse.courseId, panelSort)
-                      }
-                      className="p-1.5 rounded-lg hover:bg-canvas-alt text-muted"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setSelectedCourse(null)}
-                      className="p-1.5 rounded-lg hover:bg-canvas-alt text-muted"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* panel sort tabs */}
-                <div className="flex border-b border-border shrink-0">
-                  {["Recent", "Popular"].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setPanelSort(s)}
-                      className={`flex-1 py-2.5 text-sm font-medium transition-colors flex items-center justify-center gap-1.5 ${
-                        panelSort === s
-                          ? "bg-indigo-600/10 text-indigo-500 border-b-2 border-indigo-500"
-                          : "text-muted hover:text-main"
-                      }`}
-                    >
-                      {s === "Recent" ? (
-                        <Clock className="w-3.5 h-3.5" />
-                      ) : (
-                        <TrendingUp className="w-3.5 h-3.5" />
-                      )}
-                      {s === "Recent"
-                        ? t("discussions.sort_recent")
-                        : t("discussions.sort_popular")}
-                    </button>
-                  ))}
-                </div>
-
-                {/* panel messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {panelLoading ? (
-                    <div className="text-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-3"></div>
-                      <p className="text-muted text-sm">
-                        {t("common.loading")}
-=======
               {selectedCourse && (
                 <div
                   ref={panelRef}
@@ -1320,19 +1123,12 @@ const latestPostsByCourse = Object.values(
                       <p className="text-xs text-muted mt-0.5">
                         {selectedCourse.courseName} &bull; {panelPosts.length}{" "}
                         messages
->>>>>>> upstream/main
                       </p>
                     </div>
                   ) : panelPosts.length === 0 ? (
                     <div className="text-center py-8 text-muted text-sm">
                       {t("discussions.no_messages")}
                     </div>
-<<<<<<< HEAD
-                  ) : (
-                    panelPosts
-                      .filter((post) => isAdmin || !post.hiddenAt)
-                      .map((post) => (
-=======
                   </div>
 
                   {/* panel sort tabs */}
@@ -1395,7 +1191,6 @@ const latestPostsByCourse = Object.values(
                       panelPosts
                         .filter((post) => isAdmin || !post.hiddenAt)
                         .map((post) => (
->>>>>>> upstream/main
                         <div
                           key={post.id}
                           data-post-id={post.id}
@@ -1925,38 +1720,6 @@ const latestPostsByCourse = Object.values(
                   )}
                 </div>
 
-<<<<<<< HEAD
-                {/* panel input */}
-                <div className="p-3 border-t border-border shrink-0">
-                  <div className="flex items-center gap-2">
-                    <Smile className="w-5 h-5 text-muted shrink-0" />
-                    <input
-                      type="text"
-                      placeholder={t("discussions.share_thoughts")}
-                      value={panelReplyText}
-                      onChange={(e) => {
-                        if (e.target.value.length <= 1000)
-                          setPanelReplyText(e.target.value);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handlePanelPost(panelReplyText);
-                        }
-                      }}
-                      className="flex-1 px-3 py-2 bg-input border border-border rounded-lg text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                    <button
-                      onClick={() => handlePanelPost(panelReplyText)}
-                      className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-1.5"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                      {t("discussions.send")}
-                    </button>
-                  </div>
-                  <div className="text-right text-[11px] text-muted mt-1">
-                    {panelReplyText.length}/1000 characters
-=======
                   {/* panel input */}
                   <div className="p-2 sm:p-3 border-t border-border shrink-0">
                     <div className="flex items-center gap-2">
@@ -1988,7 +1751,6 @@ const latestPostsByCourse = Object.values(
                     <div className="text-right text-[11px] text-muted mt-1">
                       {panelReplyText.length}/1000 characters
                     </div>
->>>>>>> upstream/main
                   </div>
                 </div>
               </div>
@@ -1996,21 +1758,6 @@ const latestPostsByCourse = Object.values(
           </main>
         )}
 
-<<<<<<< HEAD
-        {activeView === "global" && (
-          <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
-            <div className="max-w-4xl mx-auto space-y-6">
-              {/* Welcome Banner */}
-              {showWelcome && (
-                <div className="relative bg-linear-to-r from-red-900/30 to-orange-900/30 border border-orange-500/30 rounded-xl p-5">
-                  {/* Close Button */}
-                  <button
-                    onClick={() => setShowWelcome(false)}
-                    className="absolute top-3 right-3 text-white hover:text-orange-300 transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-=======
           {activeView === "global" && (
             <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
               <div className="max-w-full sm:max-w-3xl md:max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2">
@@ -2024,7 +1771,6 @@ const latestPostsByCourse = Object.values(
                     >
                       <X className="w-4 h-4" />
                     </button>
->>>>>>> upstream/main
 
                   <div className="flex items-start gap-3">
                     <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-500 to-red-500 flex items-center justify-center shrink-0">
@@ -2082,38 +1828,6 @@ const latestPostsByCourse = Object.values(
                 </div>
               )}
 
-<<<<<<< HEAD
-              {/* Post Composer */}
-              <form
-                onSubmit={handleGlobalPost}
-                className="bg-card border border-border rounded-xl p-5 shadow-sm"
-              >
-                <div className="flex items-start gap-3">
-                  <Avatar
-                    src={user?.avatar_url}
-                    name={user?.name}
-                    isGoogle={user?.isGoogleUser}
-                    googleId={user?.googleId}
-                  />
-                  <textarea
-                    value={globalContent}
-                    onChange={(e) => {
-                      if (e.target.value.length <= 1000)
-                        setGlobalContent(e.target.value);
-                    }}
-                    placeholder={t("discussions.post_placeholder")}
-                    rows={4}
-                    className="flex-1 px-4 py-3 bg-input border border-border rounded-lg text-sm text-main placeholder-muted focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
-                  />
-                </div>
-                <div className="flex items-center justify-between mt-3 flex-wrap gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <select
-                        value={globalCategory}
-                        onChange={(e) => setGlobalCategory(e.target.value)}
-                        className="
-=======
                 {/* Post Composer */}
                 <form
                   onSubmit={handleGlobalPost}
@@ -2139,7 +1853,6 @@ const latestPostsByCourse = Object.values(
                           value={globalCategory}
                           onChange={(e) => setGlobalCategory(e.target.value)}
                           className="
->>>>>>> upstream/main
     appearance-none
     pl-4 pr-10 py-2
     bg-[#ff6d34]

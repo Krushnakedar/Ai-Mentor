@@ -82,24 +82,6 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-<<<<<<< HEAD
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/users/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName,
-            lastName,
-            name: username,
-            email,
-            password,
-          }),
-        },
-      );
-=======
       const validationResult = signupSchema.parse({
         firstName,
         lastName,
@@ -122,7 +104,6 @@ const SignUpPage = () => {
           password: validationResult.password,
         }),
       });
->>>>>>> upstream/main
 
       const data = await response.json();
 

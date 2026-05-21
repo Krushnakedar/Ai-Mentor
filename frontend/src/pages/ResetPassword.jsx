@@ -29,35 +29,6 @@ const ResetPassword = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-<<<<<<< HEAD
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      return setError("Passwords do not match");
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/reset-password/${token}`,
-        {
-          password,
-        },
-      );
-
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-=======
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -83,7 +54,6 @@ const ResetPassword = () => {
             setLoading(false);
         }
     };
->>>>>>> upstream/main
 
   return (
     <AuthLayout

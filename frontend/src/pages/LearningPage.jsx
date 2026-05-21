@@ -686,30 +686,6 @@ export default function Learning() {
   const saveLessonData = async (lessonId, data) => {
     try {
       const token = localStorage.getItem("token");
-<<<<<<< HEAD
-      const res = await fetch(
-        "${import.meta.env.VITE_API_BASE_URL}/api/users/course-progress",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            courseId: parseInt(courseId),
-            lessonData: {
-              lessonId,
-              data,
-            },
-            currentLesson: {
-              lessonId,
-              moduleTitle:
-                modules.find((m) => m.id === expandedModule)?.title || "",
-            },
-          }),
-        },
-      );
-=======
       const mod = modules.find((m) => m.lessons?.some((l) => l.id === currentLesson.id));
       const res = await fetch("/api/users/course-progress", {
         method: "PUT",
@@ -724,7 +700,6 @@ export default function Learning() {
           completedLesson: { lessonId },
         }),
       });
->>>>>>> upstream/main
       if (res.ok) {
         const result = await res.json();
         if (updateUser && result.purchasedCourses) updateUser({ purchasedCourses: result.purchasedCourses });
@@ -746,44 +721,8 @@ export default function Learning() {
       console.log("Lesson already completed, skipping");
       return;
     }
-<<<<<<< HEAD
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(
-        "${import.meta.env.VITE_API_BASE_URL}/api/users/course-progress",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            courseId: parseInt(courseId),
-            completedLesson: { lessonId },
-            currentLesson: {
-              lessonId,
-              moduleTitle:
-                modules.find((m) => m.id === expandedModule)?.title ||
-                expandedModule ||
-                "",
-            },
-          }),
-        },
-      );
-
-      if (res.ok) {
-        const result = await res.json();
-        if (updateUser && result.purchasedCourses) {
-          updateUser({ purchasedCourses: result.purchasedCourses });
-        }
-      }
-    } catch (error) {
-      console.error("Error updating progress:", error);
-=======
     else{
       toast.error("Please watch the video before continuing.");
->>>>>>> upstream/main
     }
   };
 
@@ -794,23 +733,10 @@ export default function Learning() {
     setGeneratedTextContent(null);
     setAiVideoUrl(null);
     setLearningData((prev) => ({ ...prev, currentLesson: lesson }));
-<<<<<<< HEAD
-
-    // Set jump time if history exists
-    const savedData = user?.purchasedCourses?.find(
-      (c) => c.courseId === parseInt(courseId),
-    )?.progress?.lessonData?.[lesson.id];
-    if (savedData?.watchHistory?.currentTime) {
-      jumpToTimeRef.current = savedData.watchHistory.currentTime;
-    } else {
-      jumpToTimeRef.current = 0;
-    }
-=======
     const savedData = user?.purchasedCourses
       ?.find((c) => c.courseId === parseInt(courseId))
       ?.progress?.lessonData?.[lesson.id];
     jumpToTimeRef.current = savedData?.watchHistory?.currentTime || 0;
->>>>>>> upstream/main
   };
 
   const handlePrevious = useCallback(() => {
@@ -900,37 +826,13 @@ export default function Learning() {
 
       if (Math.abs(vidCurrentTime - lastSavedTimeRef.current) >= 5) {
         lastSavedTimeRef.current = vidCurrentTime;
-<<<<<<< HEAD
-
-        // --- WATCH HISTORY VALIDATION FOR THE TEAM ---
-        // During initial video load, browsers might briefly report duration as NaN or Infinity.
-        // We MUST validate isFinite() and > 0, otherwise we will corrupt the database with NaN:NaN.
-        if (
-          learningData?.currentLesson &&
-          isFinite(vidDuration) &&
-          vidDuration > 0 &&
-          !isNaN(currentProgressPercent)
-        ) {
-=======
         if (learningData?.currentLesson && isFinite(vidDuration) && vidDuration > 0 && !isNaN(currentProgressPercent)) {
->>>>>>> upstream/main
           const formatDurationString = (secs) => {
             const m = Math.floor(secs / 60);
             const s = Math.floor(secs % 60);
             return `${m}:${s < 10 ? "0" : ""}${s}`;
           };
-<<<<<<< HEAD
-
-          // Ensure progress is bound between 0 and 100
-          const safeProgress = Math.max(
-            0,
-            Math.min(100, currentProgressPercent),
-          );
-
-          // Use the current lesson details to generate history
-=======
           const safeProgress = Math.max(0, Math.min(100, currentProgressPercent));
->>>>>>> upstream/main
           saveLessonData(learningData.currentLesson.id, {
             watchHistory: {
               currentTime: vidCurrentTime,
@@ -938,12 +840,7 @@ export default function Learning() {
               progressPercent: safeProgress,
               lastWatched: new Date().toISOString(),
               title: learningData.currentLesson.title || "Lesson Video",
-<<<<<<< HEAD
-              thumbnail:
-                "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop",
-=======
               thumbnail: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop",
->>>>>>> upstream/main
               formattedDuration: formatDurationString(vidDuration),
               status: safeProgress >= 95 ? "completed" : "in-progress",
             },
@@ -952,13 +849,7 @@ export default function Learning() {
       }
 
       if (captions.length > 0) {
-<<<<<<< HEAD
-        const cue = captions.find(
-          (c) => vidCurrentTime >= c.start && vidCurrentTime <= c.end,
-        );
-=======
         const cue = captions.find((c) => vidCurrentTime >= c.start && vidCurrentTime <= c.end);
->>>>>>> upstream/main
         const targetText = cue ? cue.text : "";
         if (activeCaption !== targetText) setActiveCaption(targetText);
       }
@@ -995,47 +886,6 @@ export default function Learning() {
     }
   };
 
-<<<<<<< HEAD
-  const toggleFullscreen = () => {
-    const container = playerContainerRef.current;
-    if (!container) return;
-
-    const isFull = !!(
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.msFullscreenElement
-    );
-
-    if (!isFull) {
-      const requestMethod =
-        container.requestFullscreen ||
-        container.webkitRequestFullscreen ||
-        container.mozRequestFullScreen ||
-        container.msRequestFullscreen;
-
-      if (requestMethod) {
-        requestMethod.call(container).catch((err) => {
-          console.error(
-            `Error attempting to enable full-screen mode: ${err.message}`,
-          );
-        });
-      }
-    } else {
-      const exitMethod =
-        document.exitFullscreen ||
-        document.webkitExitFullscreen ||
-        document.mozCancelFullScreen ||
-        document.msExitFullscreen;
-
-      if (exitMethod) {
-        exitMethod.call(document);
-      }
-    }
-  };
-
-=======
->>>>>>> upstream/main
   const formatTime = (time) => {
     if (
       time === undefined ||
@@ -1144,34 +994,6 @@ export default function Learning() {
     <>
       {/* Breadcrumb */}
       <div className="bg-card border-b border-border px-6 py-3 grid grid-flow-col-dense">
-<<<<<<< HEAD
-        <div className="flex items-center gap-2 text-sm text-muted mt-2">
-          <button
-            onClick={() => navigate("/")}
-            className="hover:text-blue-600 transition-colors"
-          >
-            <Home className="w-4 h-4" />
-          </button>
-          <ChevronRight className="w-4 h-4 text-muted" />
-          <button
-            onClick={() => navigate("/courses")}
-            className="hover:text-blue-600 transition-colors"
-          >
-            {t("learning.my_course")}
-          </button>
-          <ChevronRight className="w-4 h-4 text-muted" />
-          {/* Show current module name instead of course title */}
-          <button
-            className="hover:text-blue-600 transition-colors"
-            disabled
-            style={{ cursor: "default", opacity: 1, fontWeight: 600 }}
-          >
-            {(() => {
-              if (modules && currentLesson) {
-                const mod = modules.find((m) =>
-                  m.lessons?.some((l) => l.id === currentLesson.id),
-                );
-=======
         <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted mt-2">
           <button onClick={() => navigate("/")} className="hover:text-blue-600 transition-colors">
             <Home className="w-4 h-4" />
@@ -1185,7 +1007,6 @@ export default function Learning() {
             {(() => {
               if (modules && currentLesson) {
                 const mod = modules.find((m) => m.lessons?.some((l) => l.id === currentLesson.id));
->>>>>>> upstream/main
                 return mod?.title || "Module";
               }
               return "Module";
@@ -1196,22 +1017,11 @@ export default function Learning() {
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Content Selector with AI Button */}
-      <div className="bg-card border-b border-border px-6 py-3">
-        <div className="flex items-center justify-between">
-          {/* Custom Dropdown for Modules and Lessons */}
-          <div className="relative min-w-95 max-w-125 flex items-center">
-            <span className="text-main font-semibold mr-3">
-              {t("learning.contents")}
-            </span>
-=======
       {/* Content Selector */}
       <div className="bg-card border-b border-border px-6 py-3">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative w-full sm:max-w-md flex items-center">
             <span className="text-main font-semibold mr-3">{t("learning.contents")}</span>
->>>>>>> upstream/main
             <div className="relative w-full">
               <div
                 className="bg-canvas-alt border border-border rounded-2xl px-6 py-2 pr-12 text-base text-main cursor-pointer flex items-center justify-between select-none min-h-12"
@@ -1220,16 +1030,8 @@ export default function Learning() {
                   if (expandedModule) {
                     setExpandedModule(null);
                   } else {
-<<<<<<< HEAD
-                    // Find the module containing the current lesson
-                    if (modules && currentLesson) {
-                      const mod = modules.find((m) =>
-                        m.lessons?.some((l) => l.id === currentLesson.id),
-                      );
-=======
                     if (modules && currentLesson) {
                       const mod = modules.find((m) => m.lessons?.some((l) => l.id === currentLesson.id));
->>>>>>> upstream/main
                       setExpandedModule(mod?.id || null);
                     } else {
                       setExpandedModule(null);
@@ -1238,69 +1040,6 @@ export default function Learning() {
                 }}
                 style={{ fontWeight: 600 }}
               >
-<<<<<<< HEAD
-                {(() => {
-                  // Show current lesson title or placeholder
-                  if (currentLesson) {
-                    return <span>{currentLesson.title}</span>;
-                  }
-                  return <span className="text-muted">Select Lesson</span>;
-                })()}
-                <ChevronDown className="w-5 h-5 text-muted ml-2" />
-              </div>
-              {/* Dropdown Panel */}
-              <div
-                className="absolute left-0 mt-2 w-full bg-white dark:bg-gray-900 border border-border rounded-2xl shadow-xl z-50 max-h-96 overflow-y-auto min-w-95"
-                style={{ display: expandedModule ? "block" : "none" }}
-              >
-                {modules &&
-                  modules.map((module, mIdx) => (
-                    <div
-                      key={module.id || `module-${mIdx + 1}`}
-                      className="border-b border-border last:border-b-0"
-                    >
-                      <button
-                        className="w-full flex items-center justify-between px-5 py-2 text-left hover:bg-blue-100 dark:hover:bg-blue-900 font-semibold text-main focus:outline-none text-base"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleModule(module.id || `module-${mIdx + 1}`);
-                        }}
-                      >
-                        <span>{module.title || `Module ${mIdx + 1}`}</span>
-                        <ChevronDown
-                          className={`w-4 h-4 ml-2 transition-transform ${expandedModule === (module.id || `module-${mIdx + 1}`) ? "rotate-180" : ""}`}
-                        />
-                      </button>
-                      {/* Lessons List */}
-                      <div
-                        className={`transition-all ${expandedModule === (module.id || `module-${mIdx + 1}`) ? "max-h-96" : "max-h-0 overflow-hidden"}`}
-                      >
-                        {module.lessons &&
-                          module.lessons.map((lesson) => (
-                            <button
-                              key={lesson.id}
-                              className={`w-full text-left px-10 py-2 text-sm flex items-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors ${currentLesson?.id === lesson.id ? "bg-blue-600 text-white font-semibold" : "text-main"}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleLessonClick(lesson);
-                                setExpandedModule(null);
-                              }}
-                            >
-                              {lesson.type === "document" ? (
-                                <FileText className="w-4 h-4" />
-                              ) : (
-                                <Circle className="w-3 h-3" />
-                              )}
-                              <span>{lesson.title}</span>
-                              {currentLesson?.id === lesson.id && (
-                                <Check className="w-4 h-4 ml-auto" />
-                              )}
-                            </button>
-                          ))}
-                      </div>
-                    </div>
-                  ))}
-=======
                 {currentLesson ? <span>{currentLesson.title}</span> : <span className="text-muted">Select Lesson</span>}
                 <ChevronDown className="w-5 h-5 text-muted ml-2" />
               </div>
@@ -1332,41 +1071,10 @@ export default function Learning() {
                     </div>
                   </div>
                 ))}
->>>>>>> upstream/main
               </div>
             </div>
           </div>
 
-<<<<<<< HEAD
-          {/* Course Progress Bar */}
-          <div className="w-full">
-            {(() => {
-              const completedCount =
-                user?.purchasedCourses?.find(
-                  (course) => course.courseId === parseInt(courseId),
-                )?.progress?.completedLessons?.length || 0;
-              const totalCount = allLessons.length;
-              const progressPercent = Math.min(
-                (completedCount / totalCount) * 100,
-                100,
-              );
-              console.log("Progress calculation:", {
-                completedCount,
-                totalCount,
-                progressPercent,
-              });
-              return (
-                <div className="w-2/4 mt-0 mb-0 ml-auto mr-auto">
-                  <div className="w-full bg-border rounded-full h-2 ">
-                    <div
-                      className="bg-primary h-2 rounded-full"
-                      style={{ width: `${progressPercent}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-sm text-muted mt-2">
-                    {Math.round(progressPercent)}% {t("learning.complete")}
-                  </p>
-=======
           {/* Progress Bar */}
           <div className="w-full">
             {(() => {
@@ -1381,24 +1089,11 @@ export default function Learning() {
                     <div className="bg-primary h-2 rounded-full" style={{ width: `${progressPercent}%` }} />
                   </div>
                   <p className="text-sm text-muted mt-2">{Math.round(progressPercent)}% {t("learning.complete")}</p>
->>>>>>> upstream/main
                 </div>
               );
             })()}
           </div>
 
-<<<<<<< HEAD
-          <div className="flex items-center gap-3 w-full max-w-max ml-auto">
-            {/* AI Celebrity Button */}
-            <button
-              onClick={() => setIsCelebrityModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-sm hover:shadow-md"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {t("learning.select_ai_voiceover")}
-              </span>
-=======
           <div className="flex items-center justify-end sm:justify-start w-full">
             <button
               onClick={() => setIsCelebrityModalOpen(true)}
@@ -1406,7 +1101,6 @@ export default function Learning() {
             >
               <Sparkles className="w-4 h-4" />
               <span className="text-sm font-medium">{t("learning.select_ai_voiceover")}</span>
->>>>>>> upstream/main
               {selectedCelebrity && (
                 <span className="ml-1 px-1.5 py-0.5 bg-white/20 rounded-full text-xs">
                   {selectedCelebrity.split(" ")[0]}
@@ -1420,139 +1114,13 @@ export default function Learning() {
       {/* AI Celebrity Modal */}
       {isCelebrityModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-<<<<<<< HEAD
-          <div
-            ref={modalRef}
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-border"
-          >
-            {/* Modal Header */}
-=======
           <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-border">
->>>>>>> upstream/main
             <div className="flex items-center justify-between p-6 border-b border-border">
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-linear-to-r from-purple-100 to-blue-100 dark:from-purple-950 dark:to-blue-950 rounded-lg">
                   <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-<<<<<<< HEAD
-                  <h2 className="text-lg font-semibold text-main">
-                    {t("learning.ai_celebrity_title")}
-                  </h2>
-                  <p className="text-xs text-muted mt-0.5">
-                    {t("learning.ai_celebrity_subtitle")}
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsCelebrityModalOpen(false)}
-                className="p-2 hover:bg-canvas-alt rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-muted" />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6">
-              {/* Search */}
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted" />
-                <input
-                  type="search"
-                  placeholder={t("learning.search_celebrities")}
-                  value={celebritySearch}
-                  onChange={(e) => setCelebritySearch(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 bg-canvas-alt border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm text-main placeholder-muted"
-                  autoFocus
-                />
-              </div>
-
-              {/* Celebrity List */}
-              <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                {celebrities
-                  .filter((c) =>
-                    c
-                      .toLowerCase()
-                      .includes(celebritySearch.trim().toLowerCase()),
-                  )
-                  .map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => {
-                        if (selectedCelebrity === c) {
-                          setSelectedCelebrity(null);
-                          setAiVideoUrl(null);
-                        } else {
-                          setSelectedCelebrity(c);
-                        }
-                        setIsCelebrityModalOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between p-3 rounded-lg transition-all ${
-                        selectedCelebrity === c
-                          ? "bg-blue-600 text-white"
-                          : "hover:bg-canvas-alt text-main border border-border"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                            selectedCelebrity === c
-                              ? "bg-white/20"
-                              : "bg-blue-100 dark:bg-blue-900"
-                          }`}
-                        >
-                          <User
-                            className={`w-4 h-4 ${
-                              selectedCelebrity === c
-                                ? "text-white"
-                                : "text-blue-600 dark:text-blue-400"
-                            }`}
-                          />
-                        </div>
-                        <span className="font-medium">{c}</span>
-                      </div>
-                      {selectedCelebrity === c && <Check className="w-4 h-4" />}
-                    </button>
-                  ))}
-              </div>
-
-              {/* Current Selection Info */}
-              {selectedCelebrity && (
-                <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <div className="p-1.5 bg-blue-100 dark:bg-blue-900 rounded-full">
-                      <Check className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
-                        {t("learning.ai_voiceover_active")}
-                      </p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                        {t("learning.ai_celebrity_subtitle")} —{" "}
-                        <span className="font-semibold">
-                          {selectedCelebrity}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Footer */}
-            <div className="flex justify-end gap-3 p-6 border-t border-border">
-              <button
-                onClick={() => setIsCelebrityModalOpen(false)}
-                className="px-4 py-2 text-sm text-muted hover:text-main hover:bg-canvas-alt rounded-lg transition-colors"
-              >
-                {t("common.cancel")}
-              </button>
-              <button
-                onClick={() => setIsCelebrityModalOpen(false)}
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Done
-=======
                   <h2 className="text-lg font-semibold text-main">{t("learning.ai_celebrity_title")}</h2>
                   <p className="text-xs text-muted mt-0.5">{t("learning.ai_celebrity_subtitle")}</p>
                 </div>
@@ -1690,86 +1258,12 @@ export default function Learning() {
               >
                 {isNavigating ? t("learning.loading") : t("learning.next")}
                 <ChevronRight className="w-5 h-5" />
->>>>>>> upstream/main
               </button>
             </div>
           </div>
         </div>
       )}
 
-<<<<<<< HEAD
-      {/* Video and Transcript Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 min-h-[calc(100vh-180px)]">
-        {/* Video Section - Takes 2 columns */}
-        <div className="lg:col-span-2 bg-canvas-alt p-6 overflow-y-auto">
-          <div className="max-w-2xl mx-auto">
-            {/* Video Player */}
-            <VideoPlayer
-              currentLesson={currentLesson}
-              aiVideoUrl={aiVideoUrl}
-              selectedCelebrity={selectedCelebrity}
-              celebrityVideoMap={celebrityVideoMap}
-              activeCaption={activeCaption}
-              playerContainerRef={playerContainerRef}
-              videoRef={videoRef}
-              handleProgress={handleProgress}
-              isAIVideoLoading={isAIVideoLoading}
-              isPlaying={isPlaying}
-              volume={volume}
-              isMuted={isMuted}
-              progress={progress}
-              isFullscreen={isFullscreen}
-              duration={duration}
-              currentTime={currentTime}
-              togglePlay={togglePlay}
-              handleVolumeChange={handleVolumeChange}
-              toggleMute={toggleMute}
-              handleSeek={handleSeek}
-              toggleFullscreen={toggleFullscreen}
-              formatTime={formatTime}
-            />
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between items-center mb-6">
-              <button
-                onClick={handlePrevious}
-                disabled={currentLessonIndex <= 0}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 transition-all hover:shadow-md disabled:hover:shadow-none"
-              >
-                <ChevronLeft className="w-5 h-5" />
-                {t("learning.previous")}
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={
-                  currentLessonIndex >= allLessons.length - 1 || isNavigating
-                }
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 transition-all hover:shadow-md disabled:hover:shadow-none"
-              >
-                {isNavigating ? t("learning.loading") : t("learning.next")}
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Lesson Content */}
-            <div className="bg-card rounded-lg p-8 shadow-sm border border-border">
-              <h1 className="text-3xl font-semibold text-main mb-6 leading-tight">
-                <span className="text-blue-600">{currentLesson?.title}</span>
-              </h1>
-              {(generatedTextContent ||
-                currentLesson?.content?.introduction) && (
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-muted leading-relaxed">
-                    {generatedTextContent || currentLesson.content.introduction}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-=======
->>>>>>> upstream/main
         <AITranscript
           captions={captions}
           currentTime={currentTime}

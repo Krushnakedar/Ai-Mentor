@@ -45,21 +45,10 @@ const Dashboard = () => {
           "Content-Type": "application/json",
         };
 
-<<<<<<< HEAD
-        const [coursesRes, statsRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/courses`, {
-            headers,
-          }),
-          fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/api/courses/stats/cards`,
-            { headers },
-          ),
-=======
         const [coursesRes, statsRes,res] = await Promise.all([
           fetch("/api/courses", { headers }),
           fetch("/api/courses/stats/cards", { headers }),
           fetch("/api/certificate/list", {headers}),
->>>>>>> upstream/main
         ]);
 
         if (res.ok) {
@@ -409,20 +398,12 @@ const Dashboard = () => {
             {/* Slider */}
             <div
               id="courseSlider"
-<<<<<<< HEAD
-              className="flex gap-6 overflow-x-auto pb-4 scroll-smooth"
-=======
               className="flex gap-6 overflow-x-auto px-3 py-3 pb-6"
->>>>>>> upstream/main
             >
               {coursesData.allCourses.slice(0, 10).map((course, index) => (
                 <div
                   key={index}
-<<<<<<< HEAD
-                  className="bg-card rounded-xl border border-border w-64 flex-shrink-0 shadow-sm"
-=======
                   className="bg-card rounded-xl border border-border w-64 flex-shrink-0 shadow-sm transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-2 hover:scale-[1.03] hover:border-teal-400/50"
->>>>>>> upstream/main
                 >
                   {/* Image */}
                   <div className="relative h-40">
@@ -453,13 +434,9 @@ const Dashboard = () => {
 
                     <div className="flex justify-between items-center mt-2">
                       <span className="font-bold text-green-500">
-<<<<<<< HEAD
-                        ₹{course.priceValue}
-=======
                         {course.priceValue === 0
                           ? "Free"
                           : `₹${course.priceValue}`}
->>>>>>> upstream/main
                       </span>
 
                       <button
@@ -586,93 +563,11 @@ const Dashboard = () => {
                       ))}
                     </div>
                   </div>
-<<<<<<< HEAD
-                ) : (
-                  <div className="p-6 text-center text-muted">
-                    <p>
-                      {normalizedSearchQuery
-                        ? t("dashboard.no_courses_search")
-                        : t("dashboard.no_courses_enrolled")}
-                    </p>
-                    <button
-                      className="mt-4 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600"
-                      onClick={handleBrowseCourses}
-                    >
-                      {t("dashboard.browse_courses")}
-                    </button>
-                  </div>
-                )}
-=======
                 ) : null}
->>>>>>> upstream/main
               </div>
             </div>
 
             {/* Continue Learning */}
-<<<<<<< HEAD
-            {
-              filteredContinueLearning.length !== 0 ? (
-                <div>
-                  <h2 className="text-xl font-bold text-main mt-6 mb-6">
-                    {t("dashboard.continue_learning")}
-                  </h2>
-                  <div className="space-y-4">
-                    {filteredContinueLearning.map((item, index) => (
-                      <div
-                        key={index}
-                        className="bg-card rounded-xl p-4 border border-border shadow-sm hover:shadow-md transition-shadow"
-                      >
-                        <div className="flex items-center">
-                          <Link
-                            to={`/course-preview/${item.id}`}
-                            className="flex items-center flex-1"
-                          >
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className="w-12 h-12 rounded-lg mr-4"
-                            />
-                            <div className="flex-1">
-                              <h3 className="font-medium text-main mb-1 hover:text-teal-600">
-                                {item.title}
-                              </h3>
-                              <p className="text-sm text-muted mb-2">
-                                {item.lesson}
-                              </p>
-                              <div className="w-full bg-border rounded-full h-2 mb-2">
-                                <div
-                                  className={`h-2 rounded-full ${item.progressColor}`}
-                                  style={{ width: `${item.progress}%` }}
-                                ></div>
-                              </div>
-                            </div>
-                          </Link>
-                          <Link
-                            to={`/learning/${item.id}`}
-                            className="ml-4 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600"
-                          >
-                            {t("dashboard.continue")}
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null
-              // <div className="p-6  text-muted">
-              //   <p>
-              //     {normalizedSearchQuery
-              //       ? "No in-progress courses match your search."
-              //       : "Start Learning to get your progress tracked!"}
-              //   </p>
-              //   <button
-              //     className="mt-4 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600"
-              //     onClick={() => navigate("/courses")}
-              //   >
-              //     My Courses
-              //   </button>
-              // </div>
-=======
             {filteredContinueLearning.length !== 0 ? (
               <div>
                 <h2 className="text-xl font-bold text-main mt-6 mb-6">
@@ -734,7 +629,6 @@ const Dashboard = () => {
             //     My Courses
             //   </button>
             // </div>
->>>>>>> upstream/main
             }
           </div>
         </div>

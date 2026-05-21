@@ -51,21 +51,11 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-<<<<<<< HEAD
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        {
-          email,
-          password,
-        },
-      );
-=======
       const validationResult = loginSchema.parse({ email, password });
       const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
         email: validationResult.email,
         password: validationResult.password
       });
->>>>>>> upstream/main
 
       if (response.data.token) {
         login(response.data);
@@ -107,15 +97,6 @@ const LoginPage = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-<<<<<<< HEAD
-        <FormInput
-          label="Password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-=======
 
 
         <div className="mb-3">
@@ -175,7 +156,6 @@ const LoginPage = () => {
             </button>
           </div>
         </div>
->>>>>>> upstream/main
 
         <div className="flex justify-end">
           <Link
