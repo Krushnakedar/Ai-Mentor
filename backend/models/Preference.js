@@ -18,22 +18,27 @@ Preference.init(
     explanation_type: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "detailed",
     },
     learning_style: {
       type: DataTypes.STRING,
+      defaultValue: "visual",
       allowNull: false,
     },
     teaching_pace: {
       type: DataTypes.STRING,
+      defaultValue: "medium",
       allowNull: false,
     },
     example_type: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "real_world",
     },
     focus_area: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "general",
     },
   },
   {
@@ -41,7 +46,7 @@ Preference.init(
     modelName: "Preference",
     tableName: "Preferences",
     timestamps: true,
-  }
+  },
 );
 
 export default Preference;

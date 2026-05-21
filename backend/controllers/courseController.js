@@ -1,4 +1,14 @@
 import { Course, Module, Lesson, LessonContent } from "../models/modelAssociations.js";
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return null;
+
+  // already full url
+  if (imagePath.startsWith("http")) {
+    return imagePath;
+  }
+
+  return `${process.env.BACKEND_URL}/uploads/${imagePath}`;
+};
 
 /* =========================
    HELPERS
