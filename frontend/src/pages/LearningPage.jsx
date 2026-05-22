@@ -1197,7 +1197,7 @@ export default function Learning() {
             </div>
           </div>
         </div>
-        )
+
         <AITranscript
           captions={captions}
           currentTime={currentTime}
