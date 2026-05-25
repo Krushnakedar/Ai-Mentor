@@ -595,14 +595,6 @@ return (
             </tr>
           </thead>
           <tbody className="text-sm">
-            {courses.length > 0 ? (
-              courses.map((course) => (
-                <tr key={course.id} className={`border-b border-border hover:bg-canvas-alt transition-colors ${getRowClass(course.status)}`}>
-                  <td className="p-5">
-                    <div className={`font-semibold text-main ${course.status === "deleted" ? "line-through" : ""}`}>
-                      {course.title}
-                    </div>
-                    <div className="text-muted text-[10px] uppercase tracking-tighter">ID: {course.id}</div>
             {filteredCourses.length > 0 ? (
               filteredCourses.map((course) => (
                 <tr
@@ -633,11 +625,6 @@ return (
                   <td className="pr-4 text-muted text-[11px] font-medium">
                     {new Date(course.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="pr-4">
-                    <span className="text-teal-500 font-black text-[10px] uppercase tracking-widest">Published</span>
-                  </td>
-                  <td className="text-muted font-bold text-[11px]">{course.currency || "INR"}</td>
-                  <td className="text-muted text-[11px] font-medium">{new Date(course.createdAt).toLocaleDateString()}</td>
                   <td>
                     <CourseStatusDropdown
                       courseId={course.id}
