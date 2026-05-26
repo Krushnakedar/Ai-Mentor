@@ -186,6 +186,7 @@ if (!hasAccess && req.user.role !== "admin") {
             playing: lesson.playing,
             type: lesson.type,
             youtubeUrl: lesson.youtubeUrl,
+            videoUrl: lesson.videoUrl,
             content: lesson.content
               ? {
                 introduction: lesson.content.introduction,
