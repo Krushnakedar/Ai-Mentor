@@ -1,7 +1,8 @@
-import CourseReport from "../models/CouresReport.js";
+
 import User from "../models/User.js";
 import { createNotification } from "./notificationController.js";
 import AdminNotification from "../models/AdminNotification.js";
+import CourseReport from "../models/CourseReport.js";
 
 export const createReport = async (req, res) => {
   try {
